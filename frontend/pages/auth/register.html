@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro de doador — FoodTech</title>
+    <meta name="description" content="Crie sua conta de doador no FoodTech.">
+    <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+  </head>
+  <body class="login-body">
+    <header class="login-top">
+      <a class="logo" href="../../index.html">
+        <img src="../../assets/logo.svg" alt="" width="42" height="42">
+        <span>FoodTech</span>
+      </a>
+      <a class="text-link" href="../cadastro.html">Trocar perfil</a>
+    </header>
+
+    <main class="login-main">
+      <section class="login-card">
+        <p class="choice-kicker">Doador</p>
+        <h1>Criar conta de doador</h1>
+        <p class="lede">Use esta conta para oferecer alimentos e acompanhar a doação.</p>
+
+        <form id="register-form" data-profile="donor" novalidate>
+          <div class="field">
+            <label for="name">Nome completo</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Seu nome" required>
+            <p class="field-error" id="name-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="phone">Telefone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
+            <p class="field-error" id="phone-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" required>
+            <p class="field-error" id="password-error" hidden></p>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Cadastrar</button>
+          <p class="form-status" id="form-status" role="status" hidden></p>
+        </form>
+
+        <p class="login-switch">
+          Já tem conta?
+          <a href="login.html">Entrar</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="../../js/services/authService.js" defer></script>
+    <script src="../../js/register.js" defer></script>
+  </body>
+</html>
