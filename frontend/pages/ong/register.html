@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro de ONG — FoodTech</title>
+    <meta name="description" content="Cadastre sua ONG no FoodTech para receber doações.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+  </head>
+  <body class="login-body">
+    <header class="login-top">
+      <a class="logo" href="../../index.html">
+        <img src="../../assets/logo.jpg" alt="" width="42" height="42">
+        <span>FoodTech</span>
+      </a>
+      <a class="text-link" href="../cadastro.html">Trocar perfil</a>
+    </header>
+
+    <main class="login-main">
+      <section class="login-card">
+        <p class="choice-kicker">Organização</p>
+        <h1>Criar conta de ONG</h1>
+        <p class="lede">Use esta conta para receber doações e falar com doadores.</p>
+
+        <form id="register-form" data-profile="ong" novalidate>
+          <div class="field">
+            <label for="name">Nome da ONG</label>
+            <input id="name" name="name" type="text" autocomplete="organization" placeholder="Nome da organização" required>
+            <p class="field-error" id="name-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="contato@ong.org" required>
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="phone">Telefone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
+            <p class="field-error" id="phone-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" required>
+            <p class="field-error" id="password-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="address">Endereço completo</label>
+            <input id="address" name="address" type="text" autocomplete="street-address" placeholder="Rua, número, cidade">
+          </div>
+          <div class="field">
+            <label for="description">Descrição da ONG</label>
+            <input id="description" name="description" type="text" placeholder="Como a organização atua">
+          </div>
+          <div class="field">
+            <label for="foods">Alimentos aceitos</label>
+            <input id="foods" name="foods" type="text" placeholder="arroz, feijão, leite">
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Cadastrar</button>
+          <p class="form-status" id="form-status" role="status" hidden></p>
+        </form>
+
+        <p class="login-switch">
+          Já tem conta?
+          <a href="login.html">Entrar</a>
+        </p>
+      </section>
+    </main>
+
+    <script src="../../js/services/authService.js" defer></script>
+    <script src="../../js/register.js" defer></script>
+  </body>
+</html>
