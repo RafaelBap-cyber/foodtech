@@ -96,8 +96,7 @@ h3 {
 .hero,
 .stats,
 .band,
-.about,
-.site-footer {
+.about {
   width: min(1120px, calc(100% - 2.5rem));
   margin-inline: auto;
 }
@@ -544,37 +543,6 @@ input:focus-visible {
   text-align: right;
 }
 
-.site-footer {
-  width: min(1120px, calc(100% - 2.5rem));
-  margin: 0 auto 1.5rem;
-  background: var(--green);
-  color: #f3faf5;
-  border-radius: 28px;
-  padding: 1.3rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
-  padding: 0.7rem 1rem;
-}
-
-.footer-brand strong {
-  font-size: 1.05rem;
-}
-
-.footer-brand span,
-.site-footer p {
-  color: #e7f6ec;
-}
-
 .login-body {
   min-height: 100vh;
   display: flex;
@@ -706,8 +674,7 @@ input:focus-visible {
   .stats ul,
   .steps,
   .choice-grid,
-  .about,
-  .site-footer {
+  .about {
     grid-template-columns: 1fr;
     display: grid;
   }
@@ -738,11 +705,9 @@ input:focus-visible {
     padding-top: 0.9rem;
   }
 
-  .about-script,
-  .footer-brand {
+  .about-script {
     justify-self: start;
     text-align: left;
-    align-items: flex-start;
   }
 }
 
