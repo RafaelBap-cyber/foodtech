@@ -119,6 +119,12 @@ h3 {
   color: var(--green);
 }
 
+.logo img {
+  object-fit: contain;
+  border-radius: 12px;
+  background: #fff;
+}
+
 .menu-toggle {
   position: absolute;
   width: 1px;
@@ -336,12 +342,13 @@ input:focus-visible {
 .hero-circle {
   width: min(100%, 460px);
   margin-inline: auto;
-  filter: drop-shadow(0 22px 30px rgba(15, 112, 70, 0.12));
 }
 
-.hero-circle svg {
+.hero-circle img {
+  display: block;
   width: 100%;
   height: auto;
+  mix-blend-mode: multiply;
 }
 
 .hero-quote {
