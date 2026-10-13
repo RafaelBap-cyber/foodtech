@@ -48,7 +48,6 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
-  // A chamada para o back-end (authService.js) será adicionada
-  // em uma próxima etapa.
+
   console.log('Formulário válido, pronto para enviar:', { email, password });
 });

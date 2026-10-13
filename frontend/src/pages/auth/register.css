@@ -69,7 +69,7 @@ body {
   font-weight: 400;
 }
 
-/* Toggle Doador / ONG */
+
 .register-tabs {
   display: flex;
   background: #f1efe6;
@@ -135,13 +135,34 @@ body {
   background: transparent;
 }
 
-.register-error {
-  background: #fbe9e7;
-  color: #9a3b2f;
-  border-radius: 6px;
-  padding: 8px 10px;
+.register-errors {
+  background: #fdecec;
+  border: 1.5px solid #e0524d;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0 0;
   font-size: 0.85rem;
-  margin: 14px 0 0;
+  color: #b3261e;
+}
+
+.register-errors strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #b3261e;
+}
+
+.register-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.register-errors li {
+  margin: 3px 0;
+}
+
+
+.register-input-wrapper.invalid {
+  border-color: #e0524d;
 }
 
 .register-card button[type="submit"] {

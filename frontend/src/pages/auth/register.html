@@ -70,7 +70,10 @@
           <input id="password" name="password" type="password" placeholder="Crie uma senha" autocomplete="new-password" required>
         </div>
 
-        <p id="register-error" class="register-error" hidden></p>
+        <div id="register-errors" class="register-errors" role="alert" hidden>
+          <strong>Corrija os itens abaixo:</strong>
+          <ul id="register-errors-list"></ul>
+        </div>
 
         <button type="submit">Cadastrar</button>
       </form>
