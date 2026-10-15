@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .map((item) => `<span class="tag">${item}</span>`)
             .join("")}
         </div>
-        <a class="btn btn-secondary" href="details.html?id=${ong.id}">Ver detalhes</a>
+        <a class="btn btn-secondary" href="profile.html?id=${ong.id}">Ver detalhes</a>
       `;
       listEl.appendChild(card);
     });

@@ -1153,3 +1153,36 @@ input:focus-visible {
   font-size: 0.75rem;
   font-weight: 500;
 }
+
+.ong-profile-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.ong-profile-card {
+  border: 1px solid #e2e2e2;
+  border-radius: 16px;
+  padding: 2rem;
+  background: #fff;
+}
+
+.ong-profile-desc {
+  color: #555;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.ong-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ong-profile-grid h2,
+.ong-profile-card > div > h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 0.4rem;
+}
