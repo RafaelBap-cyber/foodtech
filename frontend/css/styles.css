@@ -1100,3 +1100,56 @@ input:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+.ong-list-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.ong-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.ong-card {
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: #fff;
+}
+
+.ong-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.ong-card-desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.ong-card-endereco {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 0.75rem;
+}
+
+.ong-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.ong-card-tags .tag {
+  background: #e3f5e6;
+  color: #227a3b;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
