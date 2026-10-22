@@ -4,23 +4,11 @@ if (!session) {
   window.location.replace("../auth/login.html");
 }
 
-const ongs = [
-  { id: "esperanca", name: "ONG Esperança", city: "Campinas", area: "Centro", foods: "Arroz, feijão, leite", mine: false },
-  { id: "vida-nova", name: "Instituto Vida Nova", city: "Campinas", area: "Cambuí", foods: "Hortaliças e frutas", mine: false },
-  { id: "recomeço", name: "Projeto Recomeço", city: "Campinas", area: "Taquaral", foods: "Cestas básicas", mine: false },
-  { id: "solidariedade", name: "Casa da Solidariedade", city: "Valinhos", area: "Centro", foods: "Alimentos não perecíveis", mine: false },
-];
+// ONGs da rede (/api/ongs) e doações do usuário logado (/api/donations).
+let ongs = [];
+let donations = [];
 
-if (session && session.profile === "ong") {
-  ongs[0].mine = true;
-  ongs[0].name = "Minha organização";
-}
-
-const donations = [
-  { id: 1, food: "Arroz", amount: "5 kg", ong: "ONG Esperança", status: "pending" },
-  { id: 2, food: "Feijão", amount: "3 kg", ong: "Instituto Vida Nova", status: "accepted" },
-];
-
+// Conversas de exemplo até a feature/contact ligar as mensagens à API.
 const threads = {
   esperanca: {
     title: "ONG Esperança",
@@ -36,7 +24,12 @@ const threads = {
 };
 
 let activeThread = "esperanca";
-const statusLabel = { pending: "Pendente", accepted: "Aceita", cancelled: "Recusada" };
+
+// Respostas que a ONG pode dar em cada status da doação.
+const statusActions = {
+  pending: [["accepted", "Aceitar"], ["cancelled", "Recusar"]],
+  accepted: [["completed", "Concluir"], ["cancelled", "Cancelar"]],
+};
 
 function applyProfile() {
   const isOng = session.profile === "ong";
@@ -53,35 +46,46 @@ function applyProfile() {
   });
 
   renderMetrics();
-  renderOngs("");
-  renderDonations();
   renderThreads();
-
-  // As doações do doador ficam nas páginas de doações (pages/doacoes/).
-  if (!isOng) {
-    FoodTechDonations.list()
-      .then((lista) => {
-        donorDonations = lista;
-        renderMetrics();
-      })
-      .catch(() => {});
-  }
+  loadData();
 }
 
-let donorDonations = [];
+async function loadData() {
+  document.querySelector("#lista-ongs").innerHTML = `<p class="empty">Carregando ONGs...</p>`;
+
+  const [ongsResult, donationsResult] = await Promise.allSettled([
+    FoodTechOngs.list(),
+    FoodTechDonations.list(),
+  ]);
+
+  if (ongsResult.status === "fulfilled") {
+    ongs = ongsResult.value;
+    renderOngs(document.querySelector("#filtro-ong").value);
+  } else {
+    document.querySelector("#lista-ongs").innerHTML = `<p class="empty">Não foi possível carregar as ONGs.</p>`;
+  }
+
+  if (donationsResult.status === "fulfilled") {
+    donations = donationsResult.value;
+    renderDonations();
+  } else {
+    showDonationsMessage("Não foi possível carregar as doações.");
+  }
+
+  renderMetrics();
+}
 
 function renderMetrics() {
   const isOng = session.profile === "ong";
-  const lista = isOng ? donations : donorDonations;
-  const pending = lista.filter((item) => item.status === "pending").length;
+  const pending = donations.filter((item) => item.status === "pending").length;
   const items = isOng
     ? [
-        [String(lista.length), "Doações na fila"],
+        [String(donations.length), "Doações recebidas"],
         [String(pending), "Aguardando resposta"],
         [String(ongs.length), "ONGs na rede"],
       ]
     : [
-        [String(lista.length), "Doações registradas"],
+        [String(donations.length), "Doações registradas"],
         [String(pending), "Ainda pendentes"],
         [String(ongs.length), "ONGs disponíveis"],
       ];
@@ -91,36 +95,90 @@ function renderMetrics() {
     .join("");
 }
 
-function renderOngs(query) {
-  const term = query.trim().toLowerCase();
-  const list = ongs.filter((ong) => `${ong.name} ${ong.city} ${ong.area} ${ong.foods}`.toLowerCase().includes(term));
-  const root = document.querySelector("#lista-ongs");
-  root.innerHTML = list.length
-    ? list.map((ong) => `
-        <article class="work-card">
-          <p class="choice-kicker">${ong.mine ? "Sua ONG" : ong.city}</p>
-          <h2>${ong.name}</h2>
-          <p>${ong.area} · ${ong.foods}</p>
-          <a class="text-link" href="#doacoes" data-view="doacoes">Levar para doações</a>
-        </article>
-      `).join("")
-    : `<p class="empty">Nenhuma ONG encontrada para essa busca.</p>`;
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
 }
 
+function renderOngs(query) {
+  const term = query.trim().toLowerCase();
+  const list = ongs.filter((ong) =>
+    `${ong.nome} ${ong.cidade} ${ong.alimentosAceitos.join(" ")}`.toLowerCase().includes(term)
+  );
+  const root = document.querySelector("#lista-ongs");
+
+  if (!list.length) {
+    root.innerHTML = `<p class="empty">Nenhuma ONG encontrada para essa busca.</p>`;
+    return;
+  }
+
+  root.replaceChildren(...list.map((ong) => {
+    const mine = ong.id === session.ongId;
+    const card = element("article", "work-card");
+    const link = element("a", "text-link", mine ? "Ver perfil público" : "Ver detalhes");
+    link.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
+
+    card.append(
+      element("p", "choice-kicker", mine ? "Sua ONG" : ong.cidade),
+      element("h2", "", ong.nome),
+      element("p", "", ong.alimentosAceitos.join(", ") || "Alimentos aceitos não informados"),
+      link
+    );
+
+    if (session.profile === "donor") {
+      const doar = element("a", "text-link", "Doar para esta ONG");
+      doar.href = `../doacoes/nova.html?ong=${encodeURIComponent(ong.id)}`;
+      card.append(" · ", doar);
+    }
+    return card;
+  }));
+}
+
+function showDonationsMessage(message) {
+  const row = element("tr");
+  const cell = element("td", "empty", message);
+  cell.colSpan = 5;
+  row.append(cell);
+  document.querySelector("#lista-doacoes").replaceChildren(row);
+}
+
+// Tabela de doações recebidas (só a ONG vê esta tela).
 function renderDonations() {
-  const body = document.querySelector("#lista-doacoes");
-  body.innerHTML = donations.map((item) => `
-    <tr>
-      <td>${item.food}</td>
-      <td>${item.amount}</td>
-      <td>${item.ong}</td>
-      <td><span class="status status-${item.status}">${statusLabel[item.status]}</span></td>
-      ${session.profile === "ong" ? `<td class="row-actions">
-        <button type="button" data-status="accepted" data-id="${item.id}">Aceitar</button>
-        <button type="button" data-status="cancelled" data-id="${item.id}">Recusar</button>
-      </td>` : ""}
-    </tr>
-  `).join("");
+  if (session.profile !== "ong") return;
+  if (!donations.length) {
+    showDonationsMessage("Nenhuma doação recebida ainda.");
+    return;
+  }
+
+  document.querySelector("#lista-doacoes").replaceChildren(...donations.map((item) => {
+    const row = element("tr");
+
+    const itens = element("td", "", FoodTechDonations.summarizeItems(item.items));
+    if (item.description) itens.append(element("small", "doacao-obs", item.description));
+
+    const status = element("td");
+    status.append(element("span", `status status-${item.status}`, FoodTechDonations.statusLabel[item.status]));
+
+    const actions = element("td", "row-actions");
+    (statusActions[item.status] || []).forEach(([value, label]) => {
+      const button = element("button", "", label);
+      button.type = "button";
+      button.dataset.status = value;
+      button.dataset.id = item.id;
+      actions.append(button);
+    });
+
+    row.append(
+      itens,
+      element("td", "", item.donor_name),
+      element("td", "", FoodTechDonations.formatDate(item.created_at)),
+      status,
+      actions
+    );
+    return row;
+  }));
 }
 
 function renderThreads() {
@@ -226,14 +284,22 @@ document.querySelector("#filtro-ong").addEventListener("input", (event) => {
   renderOngs(event.target.value);
 });
 
-document.querySelector("#lista-doacoes").addEventListener("click", (event) => {
+document.querySelector("#lista-doacoes").addEventListener("click", async (event) => {
   const button = event.target.closest("[data-status]");
   if (!button) return;
-  const donation = donations.find((item) => item.id === Number(button.dataset.id));
-  if (!donation) return;
-  donation.status = button.dataset.status;
-  renderDonations();
-  renderMetrics();
+
+  const buttons = button.parentElement.querySelectorAll("button");
+  buttons.forEach((item) => { item.disabled = true; });
+
+  try {
+    const updated = await FoodTechDonations.updateStatus(button.dataset.id, button.dataset.status);
+    donations = donations.map((item) => (item.id === updated.id ? updated : item));
+    renderDonations();
+    renderMetrics();
+  } catch (error) {
+    buttons.forEach((item) => { item.disabled = false; });
+    alert(error.message || "Não foi possível atualizar a doação.");
+  }
 });
 
 document.querySelector("#conversas").addEventListener("click", (event) => {

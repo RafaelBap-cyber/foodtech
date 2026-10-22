@@ -2,9 +2,9 @@ const authRoutes = require("./routes/authRoutes");
 const ongRoutes = require("./routes/ongRoutes");
 const donationRoutes = require("./routes/donationRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const locationRoutes = require("./routes/locationRoutes");
+const foodTypeRoutes = require("./routes/foodTypeRoutes");
 
-const modules = [authRoutes, ongRoutes, donationRoutes, contactRoutes, locationRoutes];
+const modules = [authRoutes, ongRoutes, donationRoutes, contactRoutes, foodTypeRoutes];
 
 function partsOf(pathname) {
   return pathname.split("/").filter(Boolean);

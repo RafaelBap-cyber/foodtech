@@ -1,5 +1,6 @@
 const form = document.querySelector("#login-form");
 const status = document.querySelector("#form-status");
+const submitButton = form.querySelector('button[type="submit"]');
 
 function showFieldError(name, message) {
   const input = form.elements[name];
@@ -11,14 +12,13 @@ function showFieldError(name, message) {
   error.textContent = message || "";
 }
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   status.hidden = true;
   status.textContent = "";
 
   const email = form.email.value.trim();
   const password = form.password.value;
-  const profile = form.dataset.profile;
   const errors = FoodTechAuth.validate({ email, password });
 
   showFieldError("email", errors.email);
@@ -26,7 +26,17 @@ form.addEventListener("submit", (event) => {
 
   if (errors.email || errors.password) return;
 
-  const result = FoodTechAuth.login({ email, password, profile });
-  FoodTechSession.start(result);
-  window.location.href = "../painel/index.html";
+  submitButton.disabled = true;
+  submitButton.textContent = "Entrando...";
+
+  try {
+    await FoodTechAuth.login({ email, password });
+    window.location.href = "../painel/index.html";
+  } catch (error) {
+    status.hidden = false;
+    status.classList.add("is-error");
+    status.textContent = error.message || "Não foi possível entrar. Tente novamente.";
+    submitButton.disabled = false;
+    submitButton.textContent = "Entrar";
+  }
 });
