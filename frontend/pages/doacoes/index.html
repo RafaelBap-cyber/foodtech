@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minhas doações — FoodTech</title>
+    <meta name="description" content="Acompanhe as doações que você registrou no FoodTech.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/donations.css">
+  </head>
+  <body class="app-body">
+    <a class="skip" href="#conteudo-doacoes">Ir para o conteúdo</a>
+
+    <header class="app-header">
+      <div class="app-bar">
+        <a class="logo" href="../painel/index.html#visao">
+          <img src="../../assets/logo.jpg" alt="" width="36" height="36">
+          <span>FoodTech</span>
+        </a>
+
+        <input class="menu-toggle" id="menu-toggle" type="checkbox">
+        <label class="menu-button" for="menu-toggle">
+          <span class="menu-lines" aria-hidden="true"></span>
+          Menu
+        </label>
+
+        <div class="app-tools">
+          <nav class="app-nav" aria-label="Ações do painel">
+            <a href="../painel/index.html#visao">Visão geral</a>
+            <a href="../painel/index.html#ongs">ONGs</a>
+            <a href="index.html" aria-current="page">Doações</a>
+            <a href="../painel/index.html#mensagens">Mensagens</a>
+            <a href="../painel/index.html#mapa">Mapa</a>
+          </nav>
+          <div class="app-user">
+            <p class="user-chip">
+              <span id="user-name"></span>
+              <small id="user-role"></small>
+            </p>
+            <button class="btn btn-outline btn-small" id="sair" type="button">Sair</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div id="conteudo-doacoes">
+        <section class="screen">
+          <header class="screen-head screen-head-row">
+            <div>
+              <p class="eyebrow">Doações</p>
+              <h1>Minhas doações</h1>
+              <p>Acompanhe o que você doou e a resposta de cada ONG.</p>
+            </div>
+            <a class="btn btn-primary" href="nova.html">Nova doação</a>
+          </header>
+
+          <div class="toolbar">
+            <label class="sr-only" for="filtro-status">Filtrar por status</label>
+            <select id="filtro-status">
+              <option value="">Todos os status</option>
+            </select>
+          </div>
+
+          <p class="form-status" id="lista-status" role="status" hidden></p>
+
+          <div class="table-wrap">
+            <table class="data-table" id="tabela-doacoes" hidden>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Itens</th>
+                  <th>ONG</th>
+                  <th>Status</th>
+                  <th><span class="sr-only">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody id="lista-doacoes"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <section class="screen" id="aviso-perfil" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Doações</p>
+          <h1>Área do doador</h1>
+          <p>Esta tela é para quem quer doar. Para ver as doações recebidas pela sua organização, use o painel.</p>
+        </header>
+        <a class="btn btn-primary" href="../painel/index.html#doacoes">Ir para o painel</a>
+      </section>
+    </main>
+
+    <script src="../../js/session.js" defer></script>
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/donationService.js" defer></script>
+    <script src="../../js/doacoes-base.js" defer></script>
+    <script src="../../js/doacoes-lista.js" defer></script>
+  </body>
+</html>

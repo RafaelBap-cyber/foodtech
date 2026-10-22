@@ -1,6 +1,7 @@
 const FoodTechDonations = {
   useMock: true,
-  storageKey: "foodtech-mock-donations",
+  // v2: as ONGs passaram a vir de /api/ongs (ids numéricos).
+  storageKey: "foodtech-mock-donations-v2",
   maxDescription: 300,
 
   units: [
@@ -35,13 +36,8 @@ const FoodTechDonations = {
     { id: "ft-13", name: "Outros" },
   ],
 
-  // Mesmas ONGs exibidas hoje no painel.js (ids de mentira, só para o mock).
-  ongs: [
-    { id: "ong-esperanca", name: "ONG Esperança", city: "Campinas" },
-    { id: "ong-vida-nova", name: "Instituto Vida Nova", city: "Campinas" },
-    { id: "ong-recomeco", name: "Projeto Recomeço", city: "Campinas" },
-    { id: "ong-solidariedade", name: "Casa da Solidariedade", city: "Valinhos" },
-  ],
+  // Preenchido por listOngs(); usado pelo mock para guardar o nome da ONG.
+  ongCache: [],
 
   // ---------- Operações públicas ----------
 
@@ -102,7 +98,7 @@ const FoodTechDonations = {
     const store = this.readStore(donor);
     const now = new Date().toISOString();
     const id = `mock-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-    const ong = this.ongs.find((item) => item.id === dados.ong_id);
+    const ong = this.ongCache.find((item) => item.id === dados.ong_id);
 
     const donation = {
       id,
@@ -131,14 +127,18 @@ const FoodTechDonations = {
     return this.foodTypes.map((item) => ({ ...item }));
   },
 
+  // As ONGs vêm sempre de /api/ongs (a mesma fonte do mapa e da listagem),
+  // adaptadas para o formato usado pelas telas de doação.
   async listOngs() {
-    if (!this.useMock) {
-      // FoodTechOngs.list() devolve outro formato (id numérico, "nome"). O
-      // adaptador só pode ser escrito depois que o formato de ONG for definido.
-      throw this.makeError(501, "A lista de ONGs para doação ainda não foi ligada à API.");
-    }
+    const ongs = await FoodTechOngs.list();
 
-    return this.ongs.map((item) => ({ ...item }));
+    this.ongCache = ongs.map((ong) => ({
+      id: String(ong.id),
+      name: ong.nome,
+      city: ong.endereco ? ong.endereco.split(",").pop().trim() : "",
+    }));
+
+    return this.ongCache.map((item) => ({ ...item }));
   },
 
   // ---------- Validação e formatação ----------
@@ -175,6 +175,17 @@ const FoodTechDonations = {
     const found = this.units.find((item) => item.value === unit);
     const number = Number(quantity).toLocaleString("pt-BR", { maximumFractionDigits: 2 });
     return `${number} ${found ? found.label : unit}`;
+  },
+
+  formatDate(iso) {
+    return new Date(iso).toLocaleDateString("pt-BR");
+  },
+
+  // Ex.: "Arroz (5 kg), Óleo (2 litros)"
+  summarizeItems(items) {
+    return (items || [])
+      .map((item) => `${item.food_type_name} (${this.formatQuantity(item.quantity, item.unit)})`)
+      .join(", ");
   },
 
   // ---------- Internos do mock ----------
@@ -239,15 +250,17 @@ const FoodTechDonations = {
     const now = Date.now();
     const tag = Math.random().toString(36).slice(2, 7);
 
+    // Mesmas ONGs do mock do back-end (backend/src/services/ongService.js).
+    const ongNames = { 1: "ONG Mão Amiga", 2: "Banco de Alimentos Esperança" };
+
     const build = (suffix, ongId, status, description, daysAgo, items) => {
       const id = `mock-exemplo-${suffix}-${tag}`;
-      const ong = this.ongs.find((item) => item.id === ongId);
       const date = new Date(now - daysAgo * day).toISOString();
       return {
         id,
         donor_id: donor,
         ong_id: ongId,
-        ong_name: ong.name,
+        ong_name: ongNames[ongId],
         status,
         description,
         created_at: date,
@@ -257,11 +270,11 @@ const FoodTechDonations = {
     };
 
     return [
-      build("1", "ong-esperanca", "pending", "Arroz e óleo separados para retirada.", 1, [
+      build("1", "1", "pending", "Arroz e óleo separados para retirada.", 1, [
         { food_type_id: "ft-1", quantity: 5, unit: "kg" },
         { food_type_id: "ft-5", quantity: 2, unit: "l" },
       ]),
-      build("2", "ong-vida-nova", "accepted", "", 4, [
+      build("2", "2", "accepted", "", 4, [
         { food_type_id: "ft-2", quantity: 3, unit: "kg" },
       ]),
     ];
