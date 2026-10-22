@@ -52,31 +52,36 @@ function applyProfile() {
     element.hidden = element.dataset.for !== session.profile;
   });
 
-  const destino = document.querySelector("#destino");
-  ongs.forEach((ong) => {
-    const option = document.createElement("option");
-    option.value = ong.name;
-    option.textContent = `${ong.name} · ${ong.city}`;
-    destino.appendChild(option);
-  });
-
   renderMetrics();
   renderOngs("");
   renderDonations();
   renderThreads();
-  renderMap();
+
+  // As doações do doador ficam nas páginas de doações (pages/doacoes/).
+  if (!isOng) {
+    FoodTechDonations.list()
+      .then((lista) => {
+        donorDonations = lista;
+        renderMetrics();
+      })
+      .catch(() => {});
+  }
 }
 
+let donorDonations = [];
+
 function renderMetrics() {
-  const pending = donations.filter((item) => item.status === "pending").length;
-  const items = session.profile === "ong"
+  const isOng = session.profile === "ong";
+  const lista = isOng ? donations : donorDonations;
+  const pending = lista.filter((item) => item.status === "pending").length;
+  const items = isOng
     ? [
-        [String(donations.length), "Doações na fila"],
+        [String(lista.length), "Doações na fila"],
         [String(pending), "Aguardando resposta"],
         [String(ongs.length), "ONGs na rede"],
       ]
     : [
-        [String(donations.length), "Doações registradas"],
+        [String(lista.length), "Doações registradas"],
         [String(pending), "Ainda pendentes"],
         [String(ongs.length), "ONGs disponíveis"],
       ];
@@ -130,17 +135,61 @@ function renderThreads() {
     .join("");
 }
 
-function renderMap() {
-  document.querySelector("#lista-mapa").innerHTML = ongs.map((ong) => `
-    <article class="work-card">
-      <p class="choice-kicker">${ong.city}</p>
-      <h2>${ong.name}</h2>
-      <p>${ong.area}</p>
-    </article>
-  `).join("");
+let mapaPainel = null;
+let mapaCarregando = false;
+
+function renderMapList(lista) {
+  const root = document.querySelector("#lista-mapa");
+  root.innerHTML = "";
+
+  lista.forEach((ong) => {
+    const card = document.createElement("article");
+    card.className = "work-card";
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = ong.nome;
+    const endereco = document.createElement("p");
+    endereco.textContent = ong.endereco || "Endereço não informado";
+    const link = document.createElement("a");
+    link.className = "text-link";
+    link.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
+    link.textContent = "Ver detalhes";
+
+    card.append(titulo, endereco, link);
+    root.appendChild(card);
+  });
+}
+
+// O Leaflet precisa do elemento visível para medir o tamanho,
+// então o mapa só é criado quando a aba é aberta pela primeira vez.
+async function openMap() {
+  if (mapaPainel) {
+    mapaPainel.invalidateSize();
+    return;
+  }
+  if (mapaCarregando) return;
+  mapaCarregando = true;
+
+  const root = document.querySelector("#lista-mapa");
+  root.innerHTML = `<p class="empty">Carregando ONGs...</p>`;
+
+  try {
+    const lista = await FoodTechOngs.list();
+    mapaPainel = FoodTechOngMap.criar("mapa-painel", lista);
+    renderMapList(lista);
+  } catch (error) {
+    root.innerHTML = `<p class="empty">Não foi possível carregar as ONGs.</p>`;
+  } finally {
+    mapaCarregando = false;
+  }
 }
 
 function showView(name) {
+  if (name === "doacoes" && session.profile !== "ong") {
+    window.location.href = "../doacoes/index.html";
+    return;
+  }
+
   const view = document.querySelector(`[data-screen="${name}"]`) ? name : "visao";
   document.querySelectorAll("[data-screen]").forEach((screen) => {
     screen.hidden = screen.dataset.screen !== view;
@@ -150,6 +199,7 @@ function showView(name) {
   });
   const toggle = document.querySelector(".menu-toggle");
   if (toggle) toggle.checked = false;
+  if (view === "mapa") openMap();
 }
 
 document.querySelectorAll("[data-view]").forEach((link) => {
@@ -174,35 +224,6 @@ document.querySelector("#busca-ongs").addEventListener("submit", (event) => {
 
 document.querySelector("#filtro-ong").addEventListener("input", (event) => {
   renderOngs(event.target.value);
-});
-
-document.querySelector("#form-doacao").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  let valid = true;
-
-  ["alimento", "quantidade", "destino"].forEach((name) => {
-    const input = form.elements[name];
-    const error = document.querySelector(`#${name}-error`);
-    const empty = !input.value.trim();
-    input.setAttribute("aria-invalid", empty ? "true" : "false");
-    error.hidden = !empty;
-    error.textContent = empty ? "Preencha este campo." : "";
-    if (empty) valid = false;
-  });
-
-  if (!valid) return;
-
-  donations.unshift({
-    id: Date.now(),
-    food: form.alimento.value.trim(),
-    amount: form.quantidade.value.trim(),
-    ong: form.destino.value,
-    status: "pending",
-  });
-  form.reset();
-  renderDonations();
-  renderMetrics();
 });
 
 document.querySelector("#lista-doacoes").addEventListener("click", (event) => {

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ONGs cadastradas — FoodTech</title>
+    <meta name="description" content="Lista de ONGs cadastradas no FoodTech.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+  </head>
+  <body>
+    <header class="login-top">
+      <a class="logo" href="../../index.html">
+        <img src="../../assets/logo.jpg" alt="" width="42" height="42">
+        <span>FoodTech</span>
+      </a>
+      <a class="text-link" href="../../index.html">Voltar ao início</a>
+    </header>
+
+    <main class="ong-list-main">
+      <h1>ONGs cadastradas</h1>
+      <p class="lede">Conheça as organizações que recebem doações pelo FoodTech.</p>
+
+      <div class="field" style="max-width: 420px; margin-top: 1.5rem;">
+        <label for="filtro-alimento">Filtrar por alimento aceito</label>
+        <input id="filtro-alimento" type="text" placeholder="ex.: arroz, feijão, leite">
+      </div>
+
+      <p class="form-status" id="status-msg" role="status" hidden></p>
+
+      <div id="ong-list" class="ong-grid"></div>
+    </main>
+
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/ongService.js" defer></script>
+    <script src="../../js/ongList.js" defer></script>
+  </body>
+</html>

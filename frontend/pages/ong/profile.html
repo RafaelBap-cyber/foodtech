@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Perfil da ONG — FoodTech</title>
+    <meta name="description" content="Conheça a ONG antes de doar.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+  </head>
+  <body>
+    <header class="login-top">
+      <a class="logo" href="../../index.html">
+        <img src="../../assets/logo.jpg" alt="" width="42" height="42">
+        <span>FoodTech</span>
+      </a>
+      <a class="text-link" href="list.html">Voltar para ONGs</a>
+    </header>
+
+    <main class="ong-profile-main">
+      <p class="form-status" id="status-msg" role="status" hidden></p>
+
+      <div id="ong-profile" class="ong-profile-card" hidden>
+        <h1 id="ong-nome"></h1>
+        <p id="ong-descricao" class="ong-profile-desc"></p>
+
+        <div class="ong-profile-grid">
+          <div>
+            <h2>Contato</h2>
+            <p id="ong-telefone"></p>
+            <p id="ong-email"></p>
+          </div>
+          <div>
+            <h2>Endereço</h2>
+            <p id="ong-endereco"></p>
+          </div>
+        </div>
+
+        <div>
+          <h2>Alimentos aceitos</h2>
+          <div id="ong-alimentos" class="ong-card-tags"></div>
+        </div>
+
+        <a class="btn btn-primary" id="ong-doar" href="../doacoes/nova.html">Doar para esta ONG</a>
+      </div>
+    </main>
+
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/ongService.js" defer></script>
+    <script src="../../js/ongProfile.js" defer></script>
+  </body>
+</html>

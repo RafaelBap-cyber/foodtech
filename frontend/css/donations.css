@@ -1,0 +1,280 @@
+.status-completed {
+  background: var(--green-soft);
+  color: var(--green-dark);
+}
+
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1.5px solid #d5dbd4;
+  background: var(--white);
+  border-radius: 14px;
+  min-height: 50px;
+  padding: 0.75rem 0.9rem;
+  font: inherit;
+  color: var(--ink);
+}
+
+.field textarea {
+  min-height: 104px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field select:focus-visible,
+.field textarea:focus-visible,
+.toolbar select:focus-visible,
+.btn-remover:focus-visible {
+  outline: 3px solid rgba(15, 112, 70, 0.28);
+  outline-offset: 2px;
+}
+
+.toolbar select {
+  min-height: 46px;
+  border: 1.5px solid #d5dbd4;
+  border-radius: 12px;
+  background: var(--white);
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: var(--ink);
+}
+
+.form-status.is-error {
+  background: #f8e8e6;
+  color: var(--danger);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Cabeçalho da tela ---------- */
+
+.screen-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--green-dark);
+}
+
+/* ---------- Cadastro ---------- */
+
+.doacao-form {
+  max-width: 760px;
+  padding: 1.4rem;
+}
+
+/* O styles.css pinta todo "p" dentro de .work-card de cinza (.work-card p),
+   o que vence .field-error e .form-status. Estas regras devolvem as cores. */
+.doacao-form .field-error {
+  margin-top: 0.1rem;
+  color: var(--danger);
+}
+
+.doacao-form .eyebrow {
+  color: var(--green);
+}
+
+.doacao-form .form-status {
+  color: var(--green-dark);
+}
+
+.doacao-form .form-status.is-error {
+  color: var(--danger);
+}
+
+.field-hint,
+.field-count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.field-count {
+  text-align: right;
+}
+
+.field label .opcional {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.doacao-itens {
+  margin: 0 0 1.1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fbfbf8;
+  min-width: 0;
+}
+
+.doacao-itens legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.doacao-itens > .field-hint {
+  margin-bottom: 0.8rem;
+}
+
+.doacao-item {
+  display: grid;
+  /* O botão remover cai numa 4ª coluna criada só quando ele aparece. */
+  grid-template-columns: 1.4fr 0.8fr 1fr;
+  grid-auto-columns: auto;
+  gap: 0.8rem;
+  align-items: start;
+  padding: 0.9rem;
+  margin-bottom: 0.7rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.doacao-item .field {
+  margin-bottom: 0;
+}
+
+.doacao-item .field-error {
+  grid-column: 1 / -1;
+}
+
+.btn-remover {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: end;
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid var(--danger);
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--danger);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-remover:hover {
+  background: #f8e8e6;
+}
+
+.btn-remover[hidden] {
+  display: none;
+}
+
+.doacao-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+
+/* ---------- Listagem ---------- */
+
+.doacao-resumo {
+  max-width: 28rem;
+}
+
+.doacao-resumo small {
+  display: block;
+  color: var(--muted);
+}
+
+.data-table .text-link {
+  white-space: nowrap;
+}
+
+/* ---------- Detalhe ---------- */
+
+.doacao-detalhe {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.doacao-detalhe .work-card h2 {
+  margin-bottom: 0.8rem;
+}
+
+.info-list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.info-list dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.info-list dd {
+  margin: 0.1rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Telas menores ---------- */
+
+@media (max-width: 900px) {
+  .doacao-detalhe {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .doacao-form {
+    padding: 1rem;
+  }
+
+  .doacao-item {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Menos espaço lateral para o texto "Selecione" caber nas colunas estreitas. */
+  .doacao-item select,
+  .doacao-item input {
+    padding-inline: 0.6rem;
+  }
+
+  .doacao-item .field:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .btn-remover {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    align-self: stretch;
+  }
+
+  .doacao-acoes {
+    flex-direction: column-reverse;
+  }
+
+  .doacao-acoes .btn {
+    width: 100%;
+  }
+}

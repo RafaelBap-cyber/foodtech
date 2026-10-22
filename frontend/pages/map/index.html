@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mapa de ONGs — FoodTech</title>
+    <meta name="description" content="Encontre ONGs perto de você no mapa do FoodTech.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/map.css">
+  </head>
+  <body>
+    <main class="map-page">
+      <header class="login-top">
+        <a class="logo" href="../../index.html">
+          <img src="../../assets/logo.jpg" alt="" width="42" height="42">
+          <span>FoodTech</span>
+        </a>
+        <a class="text-link" href="../../index.html">Voltar ao início</a>
+      </header>
+
+      <section class="map-hero">
+        <h1>Encontre ONGs perto de você</h1>
+        <p>Conectando alimentos a quem precisa.</p>
+      </section>
+
+      <section class="map-section">
+        <div class="map-section-title">
+          <h2>Mapa de instituições</h2>
+          <span id="ong-count"></span>
+        </div>
+
+        <p class="form-status" id="status-msg" role="status" hidden></p>
+        <div id="mapa"></div>
+      </section>
+
+      <section class="map-section">
+        <h2>Instituições cadastradas</h2>
+        <div class="map-ong-list" id="ong-list"></div>
+      </section>
+
+      <footer class="map-footer">
+        FoodTech · Conectando pessoas e alimentos
+      </footer>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/ongService.js" defer></script>
+    <script src="../../js/ongMap.js" defer></script>
+    <script src="../../js/map.js" defer></script>
+  </body>
+</html>

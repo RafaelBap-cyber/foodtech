@@ -1,55 +1,62 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Entrar como doador — FoodTech</title>
-    <meta name="description" content="Login de usuário do FoodTech para quem deseja doar alimentos.">
-    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/styles.css">
-  </head>
-  <body class="login-body">
-    <header class="login-top">
-      <a class="logo" href="../../index.html">
-        <img src="../../assets/logo.jpg" alt="" width="42" height="42">
-        <span>FoodTech</span>
-      </a>
-      <a class="text-link" href="../../index.html">Voltar ao início</a>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodTech - Entrar</title>
+  <meta name="description" content="Acesse sua conta FoodTech para doar alimentos ou gerenciar sua ONG.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/auth/login.css">
+</head>
+<body>
+  <main class="login-page">
+    <div class="login-card">
+      <div class="login-brand">
+        <svg class="login-brand-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4C24 4 14 10 14 20C14 26.6274 18.4772 30 24 30C29.5228 30 34 26.6274 34 20C34 10 24 4 24 4Z" fill="#0F7D46"/>
+          <path d="M10 44C10 34 16 28 24 28C20 32 18 38 18 44H10Z" fill="#F57C00"/>
+        </svg>
+        <span class="login-brand-name">Food<span class="login-brand-accent">Tech</span></span>
+      </div>
 
-    <main class="login-main">
-      <section class="login-card">
-        <p class="choice-kicker">Usuário</p>
-        <h1>Entrar como doador</h1>
-        <p class="lede">Use sua conta para oferecer alimentos e acompanhar a doação.</p>
+      <h1>Bem-vindo de volta</h1>
+      <p class="login-subtitle">Entre para continuar ajudando.</p>
 
-        <form id="login-form" data-profile="donor" novalidate>
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
-            <p class="field-error" id="email-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="password">Senha</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Mínimo de 6 caracteres" required>
-            <p class="field-error" id="password-error" hidden></p>
-          </div>
-          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
-          <p class="form-status" id="form-status" role="status" hidden></p>
-        </form>
+      <form id="login-form" novalidate>
+        <label for="email">E-mail</label>
+        <div class="login-input-wrapper">
+          <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="#8A8574" stroke-width="1.6">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 7l9 6 9-6"/>
+          </svg>
+          <input id="email" name="email" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+        </div>
 
-        <p class="login-switch">
-          Representa uma organização?
-          <a href="../ong/login.html">Entrar como ONG</a>
-        </p>
-      </section>
-    </main>
+        <label for="password">Senha</label>
+        <div class="login-input-wrapper">
+          <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="#8A8574" stroke-width="1.6">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 118 0v3"/>
+          </svg>
+          <input id="password" name="password" type="password" placeholder="Sua senha" autocomplete="current-password" required>
+        </div>
 
-    <script src="../../js/session.js" defer></script>
-    <script src="../../js/services/authService.js" defer></script>
-    <script src="../../js/login.js" defer></script>
-  </body>
+        <p id="login-error" class="login-error" hidden></p>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="login-footer-link">
+        Ainda não tem uma conta? <a href="../cadastro.html">Cadastre-se</a>
+      </p>
+      <p class="login-footer-link">
+        Representa uma ONG? <a href="../ong/login.html">Entrar como ONG</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="../../js/session.js"></script>
+  <script src="../../js/auth/login.js"></script>
+</body>
 </html>
