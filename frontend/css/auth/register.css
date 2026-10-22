@@ -1,0 +1,207 @@
+:root {
+  --verde-principal: #0f7d46;
+  --verde-claro: #a7d7a6;
+  --laranja: #f57c00;
+  --creme: #faf9f5;
+  --cinza-escuro: #333333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--creme);
+}
+
+.register-card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 8px 24px rgba(15, 125, 70, 0.08);
+}
+
+.register-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.register-brand-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.register-brand-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--verde-principal);
+}
+
+.register-brand-accent {
+  color: var(--laranja);
+}
+
+.register-card h1 {
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+  color: var(--cinza-escuro);
+}
+
+.register-subtitle {
+  margin: 0 0 18px;
+  color: #6b6b6b;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+
+.register-tabs {
+  display: flex;
+  background: #f1efe6;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.register-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 9px 0;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b6b6b;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.register-tab.active {
+  background: var(--verde-principal);
+  color: #ffffff;
+}
+
+.register-card label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cinza-escuro);
+  margin: 12px 0 6px;
+}
+
+.register-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid #e4e1d8;
+  border-radius: 10px;
+  padding: 11px 14px;
+  transition: border-color 0.15s ease;
+}
+
+.register-input-wrapper:focus-within {
+  border-color: var(--verde-principal);
+}
+
+.register-input-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.register-input-wrapper input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  color: var(--cinza-escuro);
+  background: transparent;
+}
+
+.register-errors {
+  background: #fdecec;
+  border: 1.5px solid #e0524d;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0 0;
+  font-size: 0.85rem;
+  color: #b3261e;
+}
+
+.register-errors strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #b3261e;
+}
+
+.register-errors ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.register-errors li {
+  margin: 3px 0;
+}
+
+
+.register-input-wrapper.invalid {
+  border-color: #e0524d;
+}
+
+.register-card button[type="submit"] {
+  margin-top: 22px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: var(--verde-principal);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.register-card button[type="submit"]:hover {
+  background: #0c6438;
+}
+
+.register-card button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.register-footer-link {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+.register-footer-link a {
+  color: var(--verde-principal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-footer-link a:hover {
+  text-decoration: underline;
+}
