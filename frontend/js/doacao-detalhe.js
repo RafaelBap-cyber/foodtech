@@ -21,6 +21,12 @@ if (session) {
     ong.textContent = donation.ong_name;
     ong.href = `../ong/profile.html?id=${encodeURIComponent(donation.ong_id)}`;
 
+    if (donation.ong_profile_id) {
+      const conversar = document.querySelector("#detalhe-conversar");
+      conversar.href = `../painel/index.html?conversa=${encodeURIComponent(donation.ong_profile_id)}#mensagens`;
+      conversar.hidden = false;
+    }
+
     document.querySelector("#detalhe-data").textContent = FoodTechDonations.formatDate(donation.created_at);
     document.querySelector("#detalhe-atualizacao").textContent = FoodTechDonations.formatDate(donation.updated_at);
     document.querySelector("#detalhe-descricao").textContent = donation.description || "Nenhuma observação.";

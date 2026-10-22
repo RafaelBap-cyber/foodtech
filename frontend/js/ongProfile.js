@@ -34,6 +34,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("ong-doar").href =
       `../doacoes/nova.html?ong=${encodeURIComponent(ong.id)}`;
 
+    // A conversa é com o perfil da ONG; o painel abre direto nela.
+    if (ong.profileId) {
+      document.getElementById("ong-mensagem").href =
+        `../painel/index.html?conversa=${encodeURIComponent(ong.profileId)}#mensagens`;
+    }
+
     statusEl.hidden = true;
     cardEl.hidden = false;
   } catch (erro) {

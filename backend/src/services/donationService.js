@@ -14,7 +14,7 @@ const PROXIMOS_STATUS = {
 
 const SELECT =
   "id,donor_id,ong_id,status,description,created_at,updated_at," +
-  "ongs(name),profiles(name),donation_items(id,food_type_id,quantity,unit,food_types(name))";
+  "ongs(name,profile_id),profiles(name),donation_items(id,food_type_id,quantity,unit,food_types(name))";
 
 // Converte a linha do banco para o formato usado pelo front-end.
 function paraApi(row) {
@@ -24,6 +24,7 @@ function paraApi(row) {
     donor_name: row.profiles ? row.profiles.name : "",
     ong_id: row.ong_id,
     ong_name: row.ongs ? row.ongs.name : "",
+    ong_profile_id: row.ongs ? row.ongs.profile_id : null,
     status: row.status,
     description: row.description || "",
     created_at: row.created_at,
