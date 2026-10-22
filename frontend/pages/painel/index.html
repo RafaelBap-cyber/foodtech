@@ -127,9 +127,9 @@
           <div class="thread">
             <h2 id="conversa-titulo"></h2>
             <div class="bubbles" id="bolhas"></div>
-            <form class="composer" id="form-mensagem">
+            <form class="composer" id="form-mensagem" hidden>
               <label class="sr-only" for="texto-mensagem">Mensagem</label>
-              <input id="texto-mensagem" name="texto" type="text" placeholder="Escreva uma mensagem" required>
+              <input id="texto-mensagem" name="texto" type="text" maxlength="1000" autocomplete="off" placeholder="Escreva uma mensagem" required>
               <button class="btn btn-primary" type="submit">Enviar</button>
             </form>
           </div>
@@ -158,6 +158,7 @@
     <script src="../../js/ongMap.js" defer></script>
     <script src="../../js/session.js" defer></script>
     <script src="../../js/services/donationService.js" defer></script>
+    <script src="../../js/services/contactService.js" defer></script>
     <script src="../../js/painel.js" defer></script>
   </body>
 </html>

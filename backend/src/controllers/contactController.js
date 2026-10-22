@@ -1,13 +1,23 @@
 const contactService = require("../services/contactService");
-const { sendJson } = require("../middleware");
+const authService = require("../services/authService");
+const { sendJson, handle } = require("../middleware");
 
-async function list(req, res) {
-  try {
-    const messages = await contactService.listMessages();
-    sendJson(res, 200, { ok: true, messages });
-  } catch (error) {
-    sendJson(res, error.status || 500, { ok: false, message: error.message });
-  }
-}
+const list = handle(async (req, res) => {
+  const usuario = await authService.usuarioAtual(req);
+  const conversations = await contactService.listarConversas(usuario);
+  sendJson(res, 200, { ok: true, conversations });
+});
 
-module.exports = { list };
+const conversation = handle(async (req, res) => {
+  const usuario = await authService.usuarioAtual(req);
+  const conversa = await contactService.buscarConversa(usuario, req.params.profileId);
+  sendJson(res, 200, { ok: true, ...conversa });
+});
+
+const send = handle(async (req, res) => {
+  const usuario = await authService.usuarioAtual(req);
+  const message = await contactService.enviar(usuario, req.body || {});
+  sendJson(res, 201, { ok: true, message });
+});
+
+module.exports = { list, conversation, send };

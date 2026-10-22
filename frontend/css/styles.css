@@ -1119,6 +1119,42 @@ input:focus-visible {
   background: #fff4df;
 }
 
+.bubble-time {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-align: right;
+}
+
+.bubbles {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.thread-list .thread-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.thread-item small {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.thread h2 .text-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .composer {
   display: flex;
   gap: 0.5rem;
@@ -1246,7 +1282,10 @@ input:focus-visible {
   background: #fff;
 }
 
-.ong-profile-card > .btn {
+.ong-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
   margin-top: 1.5rem;
 }
 

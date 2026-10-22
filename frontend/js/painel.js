@@ -8,22 +8,13 @@ if (!session) {
 let ongs = [];
 let donations = [];
 
-// Conversas de exemplo até a feature/contact ligar as mensagens à API.
-const threads = {
-  esperanca: {
-    title: "ONG Esperança",
-    messages: [
-      { from: "ong", text: "Podemos retirar a doação amanhã de manhã." },
-      { from: "me", text: "Pode ser às 9h. O arroz está separado." },
-    ],
-  },
-  "vida-nova": {
-    title: "Instituto Vida Nova",
-    messages: [{ from: "ong", text: "Recebemos hortaliças até sexta." }],
-  },
-};
-
-let activeThread = "esperanca";
+// Conversas entre doador e ONG (/api/messages).
+let conversations = [];
+let activeContact = null; // { id, name, profile, ongId }
+let lastMessageId = null;
+let messagesTimer = null;
+let messagesOpen = false;
+const MESSAGES_REFRESH_MS = 10000;
 
 // Respostas que a ONG pode dar em cada status da doação.
 const statusActions = {
@@ -46,7 +37,6 @@ function applyProfile() {
   });
 
   renderMetrics();
-  renderThreads();
   loadData();
 }
 
@@ -131,6 +121,12 @@ function renderOngs(query) {
       const doar = element("a", "text-link", "Doar para esta ONG");
       doar.href = `../doacoes/nova.html?ong=${encodeURIComponent(ong.id)}`;
       card.append(" · ", doar);
+
+      if (ong.profileId) {
+        const mensagem = element("a", "text-link", "Mensagem");
+        mensagem.href = `?conversa=${encodeURIComponent(ong.profileId)}#mensagens`;
+        card.append(" · ", mensagem);
+      }
     }
     return card;
   }));
@@ -170,6 +166,10 @@ function renderDonations() {
       actions.append(button);
     });
 
+    const mensagem = element("a", "text-link", "Mensagem");
+    mensagem.href = `?conversa=${encodeURIComponent(item.donor_id)}#mensagens`;
+    actions.append(mensagem);
+
     row.append(
       itens,
       element("td", "", item.donor_name),
@@ -181,16 +181,135 @@ function renderDonations() {
   }));
 }
 
-function renderThreads() {
-  document.querySelector("#conversas").innerHTML = Object.entries(threads).map(([id, thread]) => `
-    <li><button type="button" data-thread="${id}" ${id === activeThread ? "aria-current=\"true\"" : ""}>${thread.title}</button></li>
-  `).join("");
+function formatMessageTime(iso) {
+  return new Date(iso).toLocaleString("pt-BR", {
+    day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+  });
+}
 
-  const thread = threads[activeThread];
-  document.querySelector("#conversa-titulo").textContent = thread.title;
-  document.querySelector("#bolhas").innerHTML = thread.messages
-    .map((message) => `<p class="bubble ${message.from === "me" ? "mine" : ""}">${message.text}</p>`)
-    .join("");
+function renderConversations() {
+  const root = document.querySelector("#conversas");
+  const lista = [...conversations];
+
+  // Conversa nova (aberta por um link) ainda sem mensagens.
+  if (activeContact && !lista.some((item) => item.id === activeContact.id)) {
+    lista.unshift({ ...activeContact, lastMessage: "Nova conversa", lastFromMe: false });
+  }
+
+  if (!lista.length) {
+    root.replaceChildren(element("li", "empty", session.profile === "ong"
+      ? "Quando um doador escrever, a conversa aparece aqui."
+      : "Nenhuma conversa ainda. Na aba ONGs, clique em Mensagem."));
+    return;
+  }
+
+  root.replaceChildren(...lista.map((item) => {
+    const button = element("button", "thread-item");
+    button.type = "button";
+    button.dataset.contact = item.id;
+    if (activeContact && item.id === activeContact.id) button.setAttribute("aria-current", "true");
+    button.append(
+      element("strong", "", item.name),
+      element("small", "", `${item.lastFromMe ? "Você: " : ""}${item.lastMessage}`)
+    );
+
+    const li = element("li");
+    li.append(button);
+    return li;
+  }));
+}
+
+function renderMessages(messages) {
+  const root = document.querySelector("#bolhas");
+  lastMessageId = messages.length ? messages[messages.length - 1].id : null;
+
+  if (!messages.length) {
+    root.replaceChildren(element("p", "empty", "Nenhuma mensagem ainda. Escreva a primeira!"));
+    return;
+  }
+
+  root.replaceChildren(...messages.map((message) => {
+    const bubble = element("p", message.mine ? "bubble mine" : "bubble", message.content);
+    bubble.append(element("small", "bubble-time", formatMessageTime(message.created_at)));
+    return bubble;
+  }));
+  root.scrollTop = root.scrollHeight;
+}
+
+function showThreadMessage(title, message) {
+  activeContact = null;
+  document.querySelector("#conversa-titulo").textContent = title;
+  document.querySelector("#bolhas").replaceChildren(element("p", "empty", message));
+  document.querySelector("#form-mensagem").hidden = true;
+}
+
+async function openConversation(contactId) {
+  const data = await FoodTechContact.conversation(contactId);
+  activeContact = data.with;
+
+  const titulo = document.querySelector("#conversa-titulo");
+  titulo.replaceChildren(activeContact.name);
+  if (activeContact.ongId) {
+    const perfil = element("a", "text-link", "Ver perfil");
+    perfil.href = `../ong/profile.html?id=${encodeURIComponent(activeContact.ongId)}`;
+    titulo.append(" ", perfil);
+  }
+
+  renderMessages(data.messages);
+  renderConversations();
+  document.querySelector("#form-mensagem").hidden = false;
+}
+
+async function openMessages() {
+  // O clique no menu e a mudança de hash chamam showView duas vezes.
+  if (messagesOpen) return;
+  messagesOpen = true;
+  document.querySelector("#conversas").replaceChildren(element("li", "empty", "Carregando conversas..."));
+
+  // ?conversa=<id do perfil> vem dos links "Mensagem"; depois de usado, sai da URL.
+  const params = new URLSearchParams(window.location.search);
+  const pedido = params.get("conversa");
+  if (pedido) history.replaceState(null, "", window.location.pathname + window.location.hash);
+
+  try {
+    conversations = await FoodTechContact.conversations();
+    const alvo = pedido || (activeContact && activeContact.id) || (conversations[0] && conversations[0].id);
+
+    if (alvo) {
+      await openConversation(alvo);
+    } else {
+      renderConversations();
+      showThreadMessage("Mensagens", "Escolha uma conversa para começar.");
+    }
+  } catch (error) {
+    renderConversations();
+    showThreadMessage("Mensagens", error.message || "Não foi possível carregar as mensagens.");
+  }
+
+  // Só atualiza sozinho se a aba ainda estiver aberta.
+  if (messagesOpen) messagesTimer = setInterval(refreshMessages, MESSAGES_REFRESH_MS);
+}
+
+// Busca mensagens novas sem atrapalhar quem está digitando.
+async function refreshMessages() {
+  try {
+    conversations = await FoodTechContact.conversations();
+    renderConversations();
+
+    if (activeContact) {
+      const data = await FoodTechContact.conversation(activeContact.id);
+      const ultima = data.messages.length ? data.messages[data.messages.length - 1].id : null;
+      if (ultima !== lastMessageId) renderMessages(data.messages);
+    }
+  } catch {
+    // Tenta de novo na próxima rodada.
+  }
+}
+
+function stopMessages() {
+  messagesOpen = false;
+  clearInterval(messagesTimer);
+  messagesTimer = null;
 }
 
 let mapaPainel = null;
@@ -258,6 +377,8 @@ function showView(name) {
   const toggle = document.querySelector(".menu-toggle");
   if (toggle) toggle.checked = false;
   if (view === "mapa") openMap();
+  if (view === "mensagens") openMessages();
+  else stopMessages();
 }
 
 document.querySelectorAll("[data-view]").forEach((link) => {
@@ -302,21 +423,36 @@ document.querySelector("#lista-doacoes").addEventListener("click", async (event)
   }
 });
 
-document.querySelector("#conversas").addEventListener("click", (event) => {
-  const button = event.target.closest("[data-thread]");
-  if (!button) return;
-  activeThread = button.dataset.thread;
-  renderThreads();
+document.querySelector("#conversas").addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-contact]");
+  if (!button || (activeContact && button.dataset.contact === activeContact.id)) return;
+
+  try {
+    await openConversation(button.dataset.contact);
+  } catch (error) {
+    showThreadMessage("Mensagens", error.message || "Não foi possível abrir a conversa.");
+  }
 });
 
-document.querySelector("#form-mensagem").addEventListener("submit", (event) => {
+document.querySelector("#form-mensagem").addEventListener("submit", async (event) => {
   event.preventDefault();
-  const input = event.currentTarget.texto;
+  const form = event.currentTarget;
+  const input = document.querySelector("#texto-mensagem");
+  const button = form.querySelector('button[type="submit"]');
   const text = input.value.trim();
-  if (!text) return;
-  threads[activeThread].messages.push({ from: "me", text });
-  input.value = "";
-  renderThreads();
+  if (!text || !activeContact) return;
+
+  button.disabled = true;
+  try {
+    await FoodTechContact.send(activeContact.id, text);
+    input.value = "";
+    await refreshMessages();
+  } catch (error) {
+    alert(error.message || "Não foi possível enviar a mensagem.");
+  } finally {
+    button.disabled = false;
+    input.focus();
+  }
 });
 
 document.querySelector("#localizar").addEventListener("click", () => {

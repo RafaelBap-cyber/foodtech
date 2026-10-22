@@ -237,6 +237,10 @@
   overflow-wrap: anywhere;
 }
 
+.detalhe-conversar {
+  margin-top: 1rem;
+}
+
 /* ---------- Telas menores ---------- */
 
 @media (max-width: 900px) {
