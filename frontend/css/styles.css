@@ -24,6 +24,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -882,6 +886,14 @@ input:focus-visible {
 
 .work-card p {
   color: var(--muted);
+}
+
+.painel-mapa {
+  height: 380px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .toolbar {
