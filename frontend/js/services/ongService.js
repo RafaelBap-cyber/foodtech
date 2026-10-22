@@ -6,23 +6,7 @@ const FoodTechOngs = {
   },
 
   async get(id) {
-    const data = await FoodTechApi.request(`/api/ongs/${id}`);
-    return data.ong;
-  },
-
-  async create(dados) {
-    const data = await FoodTechApi.request("/api/ongs", {
-      method: "POST",
-      body: JSON.stringify(dados),
-    });
-    return data.ong;
-  },
-
-  async update(id, dados) {
-    const data = await FoodTechApi.request(`/api/ongs/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(dados),
-    });
+    const data = await FoodTechApi.request(`/api/ongs/${encodeURIComponent(id)}`);
     return data.ong;
   },
 };

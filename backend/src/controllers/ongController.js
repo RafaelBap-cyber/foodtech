@@ -1,38 +1,15 @@
 const ongService = require("../services/ongService");
-const { sendJson } = require("../middleware");
+const { sendJson, httpError, handle } = require("../middleware");
 
-function listar(req, res) {
-  const ongs = ongService.listarOngs(req.query.alimento);
+const listar = handle(async (req, res) => {
+  const ongs = await ongService.listarOngs(req.query.alimento);
   sendJson(res, 200, { ok: true, ongs });
-}
+});
 
-function buscar(req, res) {
-  const ong = ongService.buscarOngPorId(req.params.id);
-  if (!ong) {
-    sendJson(res, 404, { ok: false, message: "ONG não encontrada" });
-    return;
-  }
+const buscar = handle(async (req, res) => {
+  const ong = await ongService.buscarOngPorId(req.params.id);
+  if (!ong) throw httpError(404, "ONG não encontrada");
   sendJson(res, 200, { ok: true, ong });
-}
+});
 
-function cadastrar(req, res) {
-  const { nome, email, senha, telefone, endereco } = req.body || {};
-  if (!nome || !email || !senha || !telefone || !endereco) {
-    sendJson(res, 400, { ok: false, message: "Preencha todos os campos obrigatórios" });
-    return;
-  }
-
-  const ong = ongService.cadastrarOng(req.body);
-  sendJson(res, 201, { ok: true, ong });
-}
-
-function atualizar(req, res) {
-  const ong = ongService.atualizarOng(req.params.id, req.body || {});
-  if (!ong) {
-    sendJson(res, 404, { ok: false, message: "ONG não encontrada" });
-    return;
-  }
-  sendJson(res, 200, { ok: true, ong });
-}
-
-module.exports = { listar, buscar, cadastrar, atualizar };
+module.exports = { listar, buscar };
