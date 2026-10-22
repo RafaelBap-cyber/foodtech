@@ -1038,6 +1038,16 @@ input:focus-visible {
   gap: 0.4rem;
 }
 
+.row-actions button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.data-table .doacao-obs {
+  display: block;
+  color: var(--muted);
+}
+
 .row-actions button,
 .thread-list button {
   border: 1px solid var(--line);

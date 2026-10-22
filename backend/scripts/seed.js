@@ -91,6 +91,56 @@ async function garantirOng(ong, profileId, tiposPorNome) {
   });
 }
 
+// Duas doações da doadora de exemplo, só se ela ainda não tiver nenhuma.
+async function garantirDoacoes(doadoraId, tiposPorNome) {
+  const existentes = await db.rest(`donations?select=id&donor_id=eq.${doadoraId}`);
+  if (existentes.length) {
+    console.log("  a doadora já tem doações");
+    return;
+  }
+
+  const ongPorEmail = {};
+  for (const ong of ongs) {
+    const user = await buscarUsuario(ong.email);
+    const [registro] = await db.rest(`ongs?select=id&profile_id=eq.${user.id}`);
+    ongPorEmail[ong.email] = registro.id;
+  }
+
+  const exemplos = [
+    {
+      ong: "esperanca@example.org", status: "pending", description: "Pode retirar à tarde.",
+      items: [["Frutas", 3, "kg"], ["Leite", 6, "l"]],
+    },
+    {
+      ong: "maoamiga@example.org", status: "accepted", description: null,
+      items: [["Arroz", 5, "kg"], ["Feijão", 2, "kg"]],
+    },
+  ];
+
+  for (const exemplo of exemplos) {
+    const [doacao] = await db.rest("donations", {
+      method: "POST",
+      prefer: "return=representation",
+      body: {
+        donor_id: doadoraId,
+        ong_id: ongPorEmail[exemplo.ong],
+        status: exemplo.status,
+        description: exemplo.description,
+      },
+    });
+    await db.rest("donation_items", {
+      method: "POST",
+      body: exemplo.items.map(([nome, quantity, unit]) => ({
+        donation_id: doacao.id,
+        food_type_id: tiposPorNome[nome],
+        quantity,
+        unit,
+      })),
+    });
+  }
+  console.log(`  ${exemplos.length} doações criadas`);
+}
+
 async function main() {
   if (!db.isConfigured()) {
     throw new Error("Preencha backend/.env com as chaves do Supabase (veja backend/.env.example).");
@@ -100,13 +150,16 @@ async function main() {
   const tiposPorNome = Object.fromEntries(tipos.map((tipo) => [tipo.name, tipo.id]));
 
   console.log("Doadora:");
-  await garantirUsuario(doadora, "donor");
+  const doadoraId = await garantirUsuario(doadora, "donor");
 
   console.log("ONGs:");
   for (const ong of ongs) {
     const profileId = await garantirUsuario(ong, "ong");
     await garantirOng(ong, profileId, tiposPorNome);
   }
+
+  console.log("Doações:");
+  await garantirDoacoes(doadoraId, tiposPorNome);
 
   console.log(`\nPronto. Todas as contas de exemplo usam a senha "${SENHA}".`);
 }
