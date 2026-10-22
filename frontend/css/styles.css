@@ -888,6 +888,14 @@ input:focus-visible {
   color: var(--muted);
 }
 
+.painel-mapa {
+  height: 380px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
 .toolbar {
   display: flex;
   flex-wrap: wrap;
