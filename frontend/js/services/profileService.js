@@ -1,56 +1,31 @@
-
-const API_BASE_URL = 'http://localhost:3000/api';
-
-
-const USE_MOCK = true;
-
-
-const mockUser = {
-  name: 'Maria Silva',
-  email: 'maria@exemplo.com',
-  phone: '(19) 99999-9999',
-  role: 'doador', 
-};
-
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-
-async function request(path, options = {}) {
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Erro ao falar com o servidor.');
-  }
-
-  return data;
+// Dados da conta logada (/api/auth/me), no formato usado por js/user/profile.js.
+function toProfile(user) {
+  return {
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    role: user.profile === 'ong' ? 'ong' : 'doador',
+  };
 }
-
 
 const profileService = {
   async getProfile() {
-    if (USE_MOCK) {
-      await wait(400); 
-      return { ...mockUser };
-    }
-    return request('/users/me');
+    const data = await FoodTechApi.request('/api/auth/me');
+    return toProfile(data.user);
   },
 
   async updateProfile(changes) {
-    if (USE_MOCK) {
-      await wait(400);
-      Object.assign(mockUser, changes);
-      return { ...mockUser };
-    }
-    return request('/users/me', { method: 'PUT', body: JSON.stringify(changes) });
+    const data = await FoodTechApi.request('/api/auth/me', {
+      method: 'PUT',
+      body: JSON.stringify(changes),
+    });
+    return toProfile(data.user);
+  },
+
+  async changePassword(currentPassword, newPassword) {
+    return FoodTechApi.request('/api/auth/password', {
+      method: 'PUT',
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
   },
 };

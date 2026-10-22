@@ -13,17 +13,6 @@ const FoodTechAuth = {
     return errors;
   },
 
-  login({ email, profile }) {
-    const profileLabel = profile === "ong" ? "ONG" : "doador";
-
-    return {
-      ok: true,
-      email,
-      profile,
-      profileLabel,
-    };
-  },
-
   validateRegister({ name, email, phone, password }) {
     const errors = this.validate({ email, password });
 
@@ -32,102 +21,28 @@ const FoodTechAuth = {
     }
 
     const digits = (phone || "").replace(/\D/g, "");
-    if (digits.length < 10) {
+    if (digits.length < 10 || digits.length > 11) {
       errors.phone = "Informe um telefone com DDD.";
     }
 
     return errors;
   },
 
-  register({ name, profile }) {
-    const profileLabel = profile === "ong" ? "ONG" : "doador";
+  // Entra e já guarda a sessão. Devolve a sessão criada.
+  async login({ email, password }) {
+    const data = await FoodTechApi.request("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    return FoodTechSession.start(data);
+  },
 
-    return {
-      ok: false,
-      name,
-      profile,
-      message: `Dados conferidos para o cadastro de ${profileLabel}. A criação da conta será ligada ao serviço de autenticação.`,
-    };
+  // dados: { userType: "donor" | "ong", name, email, phone, password, ong? }
+  async register(dados) {
+    const data = await FoodTechApi.request("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify(dados),
+    });
+    return FoodTechSession.start(data);
   },
 };
-
-const authService = (() => {
-
-  const API_BASE_URL = 'http://localhost:3000/api';
-
- 
-  const USE_MOCK = true;
-
-
-  const MOCK_LOGIN = { email: 'maria@exemplo.com', password: '123456' };
-
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  async function request(path, options = {}) {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      ...options,
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Erro ao falar com o servidor.');
-    }
-
-    return data;
-  }
-
-  return {
-    async login(email, password) {
-      if (USE_MOCK) {
-        await wait(400);
-        if (email !== MOCK_LOGIN.email || password !== MOCK_LOGIN.password) {
-          throw new Error('E-mail ou senha inválidos.');
-        }
-        localStorage.setItem('token', 'token-de-exemplo');
-        return { token: 'token-de-exemplo' };
-      }
-
-      const data = await request('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
-      localStorage.setItem('token', data.token);
-      return data;
-    },
-
-    
-    async register(dados) {
-      if (USE_MOCK) {
-        await wait(400);
-        
-        return { message: 'Cadastro realizado com sucesso.' };
-      }
-
-      return request('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(dados),
-      });
-    },
-
-    logout() {
-      localStorage.removeItem('token');
-    },
-
-    getToken() {
-      return localStorage.getItem('token');
-    },
-
-    isAuthenticated() {
-      return !!localStorage.getItem('token');
-    },
-
-    
-    requireAuth(loginUrl = '../auth/login.html') {
-      if (!this.isAuthenticated()) {
-        window.location.href = loginUrl;
-      }
-    },
-  };
-})();

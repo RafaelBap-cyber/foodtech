@@ -1,5 +1,6 @@
 const form = document.getElementById('login-form');
 const errorMessage = document.getElementById('login-error');
+const submitButton = form.querySelector('button[type="submit"]');
 
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,10 +32,10 @@ function validate(email, password) {
     return 'A senha deve ter pelo menos 6 caracteres.';
   }
 
-  return null; 
+  return null;
 }
 
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit', async function (event) {
   event.preventDefault();
   hideError();
 
@@ -48,6 +49,15 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
-  FoodTechSession.start({ email: email.trim(), profile: 'donor' });
-  window.location.href = '../painel/index.html';
+  submitButton.disabled = true;
+  submitButton.textContent = 'Entrando...';
+
+  try {
+    await FoodTechAuth.login({ email: email.trim(), password });
+    window.location.href = '../painel/index.html';
+  } catch (error) {
+    showError(error.message || 'Não foi possível entrar. Tente novamente.');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Entrar';
+  }
 });

@@ -2,6 +2,7 @@ const roleInput = document.getElementById('role');
 const form = document.getElementById('register-form');
 const errorsBox = document.getElementById('register-errors');
 const errorsList = document.getElementById('register-errors-list');
+const submitButton = form.querySelector('button[type="submit"]');
 
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,6 +16,7 @@ function showErrors(errors) {
     item.textContent = message;
     errorsList.appendChild(item);
 
+    if (!field) return;
     const wrapper = document.getElementById(field).closest('.register-input-wrapper');
     wrapper.classList.add('invalid');
   });
@@ -46,10 +48,10 @@ function validate({ name, email, phone, password }) {
     });
   }
 
-  
+
   const phoneDigits = phone.replace(/\D/g, '');
 
-  
+
   if (phoneDigits.length < 10 || phoneDigits.length > 11) {
     errors.push({
       field: 'phone',
@@ -67,7 +69,7 @@ function validate({ name, email, phone, password }) {
   return errors;
 }
 
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit', async function (event) {
   event.preventDefault();
   hideErrors();
 
@@ -86,5 +88,21 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
-  console.log('Cadastro válido, pronto para enviar:', data);
+  submitButton.disabled = true;
+  submitButton.textContent = 'Cadastrando...';
+
+  try {
+    await FoodTechAuth.register({
+      userType: 'donor',
+      name: data.name.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      password: data.password,
+    });
+    window.location.href = '../painel/index.html';
+  } catch (error) {
+    showErrors([{ message: error.message || 'Não foi possível criar a conta. Tente novamente.' }]);
+    submitButton.disabled = false;
+    submitButton.textContent = 'Cadastrar';
+  }
 });
