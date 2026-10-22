@@ -38,6 +38,10 @@ body {
 .brand { font-weight: 700; font-size: 1.15rem; color: var(--verde-principal); }
 .brand span { color: var(--laranja); }
 
+.profile-links { margin-left: auto; display: flex; gap: 18px; }
+.profile-links a { color: var(--verde-principal); font-weight: 600; font-size: 0.9rem; text-decoration: none; }
+.profile-links a:hover { text-decoration: underline; }
+
 .profile-tabs {
   display: flex;
   flex-direction: column;

@@ -1,55 +1,3 @@
-const ongs = [
-  {
-    id: 1,
-    nome: "ONG Exemplo",
-    latitude: -22.9056,
-    longitude: -47.0608,
-    endereco: "Campinas, SP",
-    alimentos: "Frutas e verduras",
-  },
-  {
-    id: 2,
-    nome: "ONG Esperança",
-    latitude: -22.9005,
-    longitude: -47.055,
-    endereco: "Campinas, SP",
-    alimentos: "Pães e alimentos não perecíveis",
-  },
-  {
-    id: 3,
-    nome: "ONG Solidária",
-    latitude: -22.915,
-    longitude: -47.065,
-    endereco: "Campinas, SP",
-    alimentos: "Leite e produtos básicos",
-  },
-];
-
-const centro = [-22.9056, -47.0608];
-
-function temCoordenadas(ong) {
-  return (
-    ong.latitude !== null &&
-    ong.longitude !== null &&
-    Number.isFinite(Number(ong.latitude)) &&
-    Number.isFinite(Number(ong.longitude))
-  );
-}
-
-function criarMapa() {
-  const mapa = L.map("mapa").setView(centro, 13);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap",
-  }).addTo(mapa);
-
-  ongs.filter(temCoordenadas).forEach((ong) => {
-    L.marker([Number(ong.latitude), Number(ong.longitude)])
-      .addTo(mapa)
-      .bindPopup(ong.nome);
-  });
-}
-
 function criarElemento(tag, className, texto) {
   const elemento = document.createElement(tag);
   if (className) elemento.className = className;
@@ -57,18 +5,22 @@ function criarElemento(tag, className, texto) {
   return elemento;
 }
 
-function renderizarLista() {
+function renderizarLista(ongs) {
   const lista = document.querySelector("#ong-list");
 
   ongs.forEach((ong) => {
-    const card = criarElemento("article", "map-ong-card");
-    const informacoes = criarElemento("div", "map-ong-info");
+    const card = criarElemento("a", "map-ong-card");
+    card.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
 
+    const informacoes = criarElemento("div", "map-ong-info");
     informacoes.append(
       criarElemento("h3", "", ong.nome),
-      criarElemento("p", "", ong.endereco),
-      criarElemento("span", "map-tag", ong.alimentos)
+      criarElemento("p", "", ong.endereco || "Endereço não informado")
     );
+    (ong.alimentosAceitos || []).forEach((alimento) => {
+      informacoes.appendChild(criarElemento("span", "map-tag", alimento));
+    });
+
     card.append(criarElemento("div", "map-ong-icon", "📍"), informacoes);
     lista.appendChild(card);
   });
@@ -76,5 +28,19 @@ function renderizarLista() {
   document.querySelector("#ong-count").textContent = `${ongs.length} instituições`;
 }
 
-criarMapa();
-renderizarLista();
+async function carregarMapa() {
+  const status = document.querySelector("#status-msg");
+  status.textContent = "Carregando...";
+  status.hidden = false;
+
+  try {
+    const ongs = await FoodTechOngs.list();
+    FoodTechOngMap.criar("mapa", ongs);
+    renderizarLista(ongs);
+    status.hidden = true;
+  } catch (erro) {
+    status.textContent = "Não foi possível carregar as ONGs.";
+  }
+}
+
+carregarMapa();

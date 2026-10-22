@@ -64,7 +64,6 @@ function applyProfile() {
   renderOngs("");
   renderDonations();
   renderThreads();
-  renderMap();
 }
 
 function renderMetrics() {
@@ -130,14 +129,53 @@ function renderThreads() {
     .join("");
 }
 
-function renderMap() {
-  document.querySelector("#lista-mapa").innerHTML = ongs.map((ong) => `
-    <article class="work-card">
-      <p class="choice-kicker">${ong.city}</p>
-      <h2>${ong.name}</h2>
-      <p>${ong.area}</p>
-    </article>
-  `).join("");
+let mapaPainel = null;
+let mapaCarregando = false;
+
+function renderMapList(lista) {
+  const root = document.querySelector("#lista-mapa");
+  root.innerHTML = "";
+
+  lista.forEach((ong) => {
+    const card = document.createElement("article");
+    card.className = "work-card";
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = ong.nome;
+    const endereco = document.createElement("p");
+    endereco.textContent = ong.endereco || "Endereço não informado";
+    const link = document.createElement("a");
+    link.className = "text-link";
+    link.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
+    link.textContent = "Ver detalhes";
+
+    card.append(titulo, endereco, link);
+    root.appendChild(card);
+  });
+}
+
+// O Leaflet precisa do elemento visível para medir o tamanho,
+// então o mapa só é criado quando a aba é aberta pela primeira vez.
+async function openMap() {
+  if (mapaPainel) {
+    mapaPainel.invalidateSize();
+    return;
+  }
+  if (mapaCarregando) return;
+  mapaCarregando = true;
+
+  const root = document.querySelector("#lista-mapa");
+  root.innerHTML = `<p class="empty">Carregando ONGs...</p>`;
+
+  try {
+    const lista = await FoodTechOngs.list();
+    mapaPainel = FoodTechOngMap.criar("mapa-painel", lista);
+    renderMapList(lista);
+  } catch (error) {
+    root.innerHTML = `<p class="empty">Não foi possível carregar as ONGs.</p>`;
+  } finally {
+    mapaCarregando = false;
+  }
 }
 
 function showView(name) {
@@ -150,6 +188,7 @@ function showView(name) {
   });
   const toggle = document.querySelector(".menu-toggle");
   if (toggle) toggle.checked = false;
+  if (view === "mapa") openMap();
 }
 
 document.querySelectorAll("[data-view]").forEach((link) => {
