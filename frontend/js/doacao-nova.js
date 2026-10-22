@@ -232,6 +232,11 @@ if (session) {
         })),
         "Selecione uma ONG"
       );
+
+      // Vindo do perfil da ONG (?ong=<id>), a ONG já fica escolhida.
+      const ongDaUrl = new URLSearchParams(window.location.search).get("ong");
+      if (ongs.some((ong) => ong.id === ongDaUrl)) ongSelect.value = ongDaUrl;
+
       addItem(false);
     } catch (error) {
       fillSelect(ongSelect, [], "Não foi possível carregar");

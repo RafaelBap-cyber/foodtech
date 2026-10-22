@@ -1179,6 +1179,10 @@ input:focus-visible {
   background: #fff;
 }
 
+.ong-profile-card > .btn {
+  margin-top: 1.5rem;
+}
+
 .ong-profile-desc {
   color: #555;
   margin: 0.5rem 0 1.5rem;

@@ -166,11 +166,16 @@ function renderDonations() {
     return;
   }
 
+  // Mesmas doações de pages/doacoes/ (FoodTechDonations).
+  const chipClass = { completed: 'done', cancelled: 'cancelled' };
+
   donations.forEach((d) => {
     const li = el('li', 'donation');
     const info = el('div');
-    info.append(el('strong', '', d.item), el('small', '', `${d.ong} · ${d.date}`));
-    li.append(info, el('span', `chip ${d.status}`, d.status === 'done' ? 'Concluída' : 'Em andamento'));
+    const link = el('a', '', FoodTechDonations.summarizeItems(d.items));
+    link.href = `../doacoes/detalhe.html?id=${encodeURIComponent(d.id)}`;
+    info.append(link, el('small', '', `${d.ong_name} · ${FoodTechDonations.formatDate(d.created_at)}`));
+    li.append(info, el('span', `chip ${chipClass[d.status] || 'progress'}`, FoodTechDonations.statusLabel[d.status] || d.status));
     list.appendChild(li);
   });
 }
@@ -208,7 +213,7 @@ async function loadProfile() {
   try {
     [user, donations] = await Promise.all([
       profileService.getProfile(),
-      profileService.getDonations(),
+      FoodTechDonations.list(),
     ]);
     render();
     renderDonations();
