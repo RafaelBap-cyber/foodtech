@@ -70,33 +70,6 @@ body {
 }
 
 
-.register-tabs {
-  display: flex;
-  background: #f1efe6;
-  border-radius: 10px;
-  padding: 4px;
-  margin-bottom: 20px;
-}
-
-.register-tab {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 9px 0;
-  border-radius: 8px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #6b6b6b;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.register-tab.active {
-  background: var(--verde-principal);
-  color: #ffffff;
-}
-
 .register-card label {
   display: block;
   font-size: 0.82rem;

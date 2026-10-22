@@ -1,4 +1,3 @@
-const tabs = document.querySelectorAll('.register-tab');
 const roleInput = document.getElementById('role');
 const form = document.getElementById('register-form');
 const errorsBox = document.getElementById('register-errors');
@@ -67,23 +66,6 @@ function validate({ name, email, phone, password }) {
 
   return errors;
 }
-
-tabs.forEach((tab) => {
-  tab.addEventListener('click', function () {
-    
-    tabs.forEach((t) => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-
-    
-    tab.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-
-   
-    roleInput.value = tab.dataset.role;
-  });
-});
 
 form.addEventListener('submit', function (event) {
   event.preventDefault();

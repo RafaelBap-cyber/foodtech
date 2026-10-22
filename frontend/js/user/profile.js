@@ -195,7 +195,8 @@ $('password-form').addEventListener('submit', (event) => {
 });
 
 $('logout-button').addEventListener('click', () => {
-  localStorage.removeItem('token'); 
+  localStorage.removeItem('token');
+  FoodTechSession.end();
   window.location.href = '../auth/login.html';
 });
 
