@@ -48,6 +48,6 @@ form.addEventListener('submit', function (event) {
     return;
   }
 
-
-  console.log('Formulário válido, pronto para enviar:', { email, password });
+  FoodTechSession.start({ email: email.trim(), profile: 'donor' });
+  window.location.href = '../painel/index.html';
 });
