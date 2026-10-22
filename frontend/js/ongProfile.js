@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       .map((item) => `<span class="tag">${item}</span>`)
       .join("");
 
+    document.getElementById("ong-doar").href =
+      `../doacoes/nova.html?ong=${encodeURIComponent(ong.id)}`;
+
     statusEl.hidden = true;
     cardEl.hidden = false;
   } catch (erro) {

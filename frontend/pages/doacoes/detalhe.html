@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalhe da doação — FoodTech</title>
+    <meta name="description" content="Veja os itens e a situação de uma doação registrada no FoodTech.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/donations.css">
+  </head>
+  <body class="app-body">
+    <a class="skip" href="#conteudo-doacoes">Ir para o conteúdo</a>
+
+    <header class="app-header">
+      <div class="app-bar">
+        <a class="logo" href="../painel/index.html#visao">
+          <img src="../../assets/logo.jpg" alt="" width="36" height="36">
+          <span>FoodTech</span>
+        </a>
+
+        <input class="menu-toggle" id="menu-toggle" type="checkbox">
+        <label class="menu-button" for="menu-toggle">
+          <span class="menu-lines" aria-hidden="true"></span>
+          Menu
+        </label>
+
+        <div class="app-tools">
+          <nav class="app-nav" aria-label="Ações do painel">
+            <a href="../painel/index.html#visao">Visão geral</a>
+            <a href="../painel/index.html#ongs">ONGs</a>
+            <a href="index.html" aria-current="page">Doações</a>
+            <a href="../painel/index.html#mensagens">Mensagens</a>
+            <a href="../painel/index.html#mapa">Mapa</a>
+          </nav>
+          <div class="app-user">
+            <p class="user-chip">
+              <span id="user-name"></span>
+              <small id="user-role"></small>
+            </p>
+            <button class="btn btn-outline btn-small" id="sair" type="button">Sair</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div id="conteudo-doacoes">
+        <section class="screen">
+          <a class="back-link" href="index.html">← Minhas doações</a>
+
+          <p class="form-status" id="detalhe-status" role="status" hidden></p>
+
+          <div id="detalhe" hidden>
+            <header class="screen-head">
+              <p class="eyebrow">Doação</p>
+              <h1 id="detalhe-titulo"></h1>
+              <p><span class="status" id="detalhe-situacao"></span></p>
+            </header>
+
+            <div class="doacao-detalhe">
+              <article class="work-card">
+                <h2>Resumo</h2>
+                <dl class="info-list">
+                  <div>
+                    <dt>ONG</dt>
+                    <dd><a class="text-link" id="detalhe-ong"></a></dd>
+                  </div>
+                  <div>
+                    <dt>Registrada em</dt>
+                    <dd id="detalhe-data"></dd>
+                  </div>
+                  <div>
+                    <dt>Última atualização</dt>
+                    <dd id="detalhe-atualizacao"></dd>
+                  </div>
+                  <div>
+                    <dt>Observações</dt>
+                    <dd id="detalhe-descricao"></dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="work-card">
+                <h2>Itens</h2>
+                <div class="table-wrap">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Alimento</th>
+                        <th>Quantidade</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detalhe-itens"></tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="screen" id="aviso-perfil" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Doações</p>
+          <h1>Área do doador</h1>
+          <p>Esta tela é para quem quer doar. Para ver as doações recebidas pela sua organização, use o painel.</p>
+        </header>
+        <a class="btn btn-primary" href="../painel/index.html#doacoes">Ir para o painel</a>
+      </section>
+    </main>
+
+    <script src="../../js/session.js" defer></script>
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/donationService.js" defer></script>
+    <script src="../../js/doacoes-base.js" defer></script>
+    <script src="../../js/doacao-detalhe.js" defer></script>
+  </body>
+</html>

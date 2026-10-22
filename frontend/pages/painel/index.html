@@ -59,7 +59,7 @@
         <div class="shortcut-grid">
           <a class="shortcut" href="#doacoes" data-view="doacoes">
             <strong>Doações</strong>
-            <span data-for="donor">Registrar um alimento disponível.</span>
+            <span data-for="donor">Registrar e acompanhar suas doações.</span>
             <span data-for="ong">Aceitar ou recusar o que chegou.</span>
           </a>
           <a class="shortcut" href="#ongs" data-view="ongs">
@@ -92,35 +92,13 @@
         <div class="card-list" id="lista-ongs"></div>
       </section>
 
+      <!-- Só a ONG usa esta tela; o doador é levado para pages/doacoes/. -->
       <section class="screen" id="doacoes" data-screen="doacoes" hidden>
         <header class="screen-head">
           <p class="eyebrow">Doações</p>
-          <h1 data-for="donor">Registrar doação</h1>
-          <h1 data-for="ong">Doações recebidas</h1>
-          <p data-for="donor">Informe o alimento, a quantidade e a ONG de destino.</p>
-          <p data-for="ong">Atualize o status conforme a organização puder receber.</p>
+          <h1>Doações recebidas</h1>
+          <p>Atualize o status conforme a organização puder receber.</p>
         </header>
-
-        <form class="work-card" id="form-doacao" data-for="donor" novalidate>
-          <div class="form-row">
-            <div class="field">
-              <label for="alimento">Alimento</label>
-              <input id="alimento" name="alimento" type="text" placeholder="Arroz, feijão, legumes..." required>
-              <p class="field-error" id="alimento-error" hidden></p>
-            </div>
-            <div class="field">
-              <label for="quantidade">Quantidade</label>
-              <input id="quantidade" name="quantidade" type="text" placeholder="2 kg" required>
-              <p class="field-error" id="quantidade-error" hidden></p>
-            </div>
-            <div class="field">
-              <label for="destino">ONG</label>
-              <select id="destino" name="destino" required></select>
-              <p class="field-error" id="destino-error" hidden></p>
-            </div>
-          </div>
-          <button class="btn btn-primary" type="submit">Registrar doação</button>
-        </form>
 
         <div class="table-wrap">
           <table class="data-table">
@@ -179,6 +157,7 @@
     <script src="../../js/services/ongService.js" defer></script>
     <script src="../../js/ongMap.js" defer></script>
     <script src="../../js/session.js" defer></script>
+    <script src="../../js/services/donationService.js" defer></script>
     <script src="../../js/painel.js" defer></script>
   </body>
 </html>

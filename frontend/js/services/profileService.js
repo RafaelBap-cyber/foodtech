@@ -12,12 +12,6 @@ const mockUser = {
   role: 'doador', 
 };
 
-const mockDonations = [
-  { item: 'Alimentos não perecíveis', ong: 'ONG Esperança', date: '12/05/2025', status: 'done' },
-  { item: 'Frutas e verduras', ong: 'Instituto Vida Nova', date: '03/05/2025', status: 'progress' },
-  { item: 'Leite e derivados', ong: 'Projeto Recomeço', date: '25/04/2025', status: 'done' },
-];
-
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 
@@ -58,13 +52,5 @@ const profileService = {
       return { ...mockUser };
     }
     return request('/users/me', { method: 'PUT', body: JSON.stringify(changes) });
-  },
-
-  async getDonations() {
-    if (USE_MOCK) {
-      await wait(400);
-      return [...mockDonations];
-    }
-    return request('/users/me/donations');
   },
 };

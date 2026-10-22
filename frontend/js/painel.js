@@ -52,30 +52,36 @@ function applyProfile() {
     element.hidden = element.dataset.for !== session.profile;
   });
 
-  const destino = document.querySelector("#destino");
-  ongs.forEach((ong) => {
-    const option = document.createElement("option");
-    option.value = ong.name;
-    option.textContent = `${ong.name} · ${ong.city}`;
-    destino.appendChild(option);
-  });
-
   renderMetrics();
   renderOngs("");
   renderDonations();
   renderThreads();
+
+  // As doações do doador ficam nas páginas de doações (pages/doacoes/).
+  if (!isOng) {
+    FoodTechDonations.list()
+      .then((lista) => {
+        donorDonations = lista;
+        renderMetrics();
+      })
+      .catch(() => {});
+  }
 }
 
+let donorDonations = [];
+
 function renderMetrics() {
-  const pending = donations.filter((item) => item.status === "pending").length;
-  const items = session.profile === "ong"
+  const isOng = session.profile === "ong";
+  const lista = isOng ? donations : donorDonations;
+  const pending = lista.filter((item) => item.status === "pending").length;
+  const items = isOng
     ? [
-        [String(donations.length), "Doações na fila"],
+        [String(lista.length), "Doações na fila"],
         [String(pending), "Aguardando resposta"],
         [String(ongs.length), "ONGs na rede"],
       ]
     : [
-        [String(donations.length), "Doações registradas"],
+        [String(lista.length), "Doações registradas"],
         [String(pending), "Ainda pendentes"],
         [String(ongs.length), "ONGs disponíveis"],
       ];
@@ -179,6 +185,11 @@ async function openMap() {
 }
 
 function showView(name) {
+  if (name === "doacoes" && session.profile !== "ong") {
+    window.location.href = "../doacoes/index.html";
+    return;
+  }
+
   const view = document.querySelector(`[data-screen="${name}"]`) ? name : "visao";
   document.querySelectorAll("[data-screen]").forEach((screen) => {
     screen.hidden = screen.dataset.screen !== view;
@@ -213,35 +224,6 @@ document.querySelector("#busca-ongs").addEventListener("submit", (event) => {
 
 document.querySelector("#filtro-ong").addEventListener("input", (event) => {
   renderOngs(event.target.value);
-});
-
-document.querySelector("#form-doacao").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  let valid = true;
-
-  ["alimento", "quantidade", "destino"].forEach((name) => {
-    const input = form.elements[name];
-    const error = document.querySelector(`#${name}-error`);
-    const empty = !input.value.trim();
-    input.setAttribute("aria-invalid", empty ? "true" : "false");
-    error.hidden = !empty;
-    error.textContent = empty ? "Preencha este campo." : "";
-    if (empty) valid = false;
-  });
-
-  if (!valid) return;
-
-  donations.unshift({
-    id: Date.now(),
-    food: form.alimento.value.trim(),
-    amount: form.quantidade.value.trim(),
-    ong: form.destino.value,
-    status: "pending",
-  });
-  form.reset();
-  renderDonations();
-  renderMetrics();
 });
 
 document.querySelector("#lista-doacoes").addEventListener("click", (event) => {
