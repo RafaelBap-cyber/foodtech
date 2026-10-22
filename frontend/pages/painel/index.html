@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel — FoodTech</title>
+    <meta name="description" content="Painel do FoodTech para registrar doações, acompanhar ONGs e trocar mensagens.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+  </head>
+  <body class="app-body">
+    <a class="skip" href="#painel">Ir para o painel</a>
+
+    <header class="app-header">
+      <div class="app-bar">
+        <a class="logo" href="#visao" data-view="visao">
+          <img src="../../assets/logo.jpg" alt="" width="36" height="36">
+          <span>FoodTech</span>
+        </a>
+
+        <input class="menu-toggle" id="menu-toggle" type="checkbox">
+        <label class="menu-button" for="menu-toggle">
+          <span class="menu-lines" aria-hidden="true"></span>
+          Menu
+        </label>
+
+        <div class="app-tools">
+          <nav class="app-nav" aria-label="Ações do painel">
+            <a href="#visao" data-view="visao">Visão geral</a>
+            <a href="#ongs" data-view="ongs">ONGs</a>
+            <a href="#doacoes" data-view="doacoes">Doações</a>
+            <a href="#mensagens" data-view="mensagens">Mensagens</a>
+            <a href="#mapa" data-view="mapa">Mapa</a>
+          </nav>
+          <div class="app-user">
+            <p class="user-chip">
+              <span id="user-name"></span>
+              <small id="user-role"></small>
+            </p>
+            <button class="btn btn-outline btn-small" id="sair" type="button">Sair</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main" id="painel">
+      <section class="screen" id="visao" data-screen="visao">
+        <header class="screen-head">
+          <p class="eyebrow">Painel</p>
+          <h1 id="visao-titulo">Visão geral</h1>
+          <p id="visao-texto"></p>
+        </header>
+        <div class="metric-grid" id="metricas"></div>
+        <div class="shortcut-grid">
+          <a class="shortcut" href="#doacoes" data-view="doacoes">
+            <strong>Doações</strong>
+            <span data-for="donor">Registrar um alimento disponível.</span>
+            <span data-for="ong">Aceitar ou recusar o que chegou.</span>
+          </a>
+          <a class="shortcut" href="#ongs" data-view="ongs">
+            <strong>ONGs</strong>
+            <span data-for="donor">Escolher quem pode receber a doação.</span>
+            <span data-for="ong">Conferir os dados da organização.</span>
+          </a>
+          <a class="shortcut" href="#mensagens" data-view="mensagens">
+            <strong>Mensagens</strong>
+            <span>Combinar entrega e tirar dúvidas.</span>
+          </a>
+          <a class="shortcut" href="#mapa" data-view="mapa">
+            <strong>Mapa</strong>
+            <span>Ver organizações por cidade e bairro.</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="screen" id="ongs" data-screen="ongs" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">ONGs</p>
+          <h1>Organizações</h1>
+          <p data-for="donor">Busque uma ONG para encaminhar a doação.</p>
+          <p data-for="ong">Estes são os dados públicos da rede. O perfil da sua organização está em destaque.</p>
+        </header>
+        <form class="toolbar" id="busca-ongs">
+          <label class="sr-only" for="filtro-ong">Buscar ONG</label>
+          <input id="filtro-ong" name="q" type="search" placeholder="Nome, cidade ou alimento">
+        </form>
+        <div class="card-list" id="lista-ongs"></div>
+      </section>
+
+      <section class="screen" id="doacoes" data-screen="doacoes" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Doações</p>
+          <h1 data-for="donor">Registrar doação</h1>
+          <h1 data-for="ong">Doações recebidas</h1>
+          <p data-for="donor">Informe o alimento, a quantidade e a ONG de destino.</p>
+          <p data-for="ong">Atualize o status conforme a organização puder receber.</p>
+        </header>
+
+        <form class="work-card" id="form-doacao" data-for="donor" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="alimento">Alimento</label>
+              <input id="alimento" name="alimento" type="text" placeholder="Arroz, feijão, legumes..." required>
+              <p class="field-error" id="alimento-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="quantidade">Quantidade</label>
+              <input id="quantidade" name="quantidade" type="text" placeholder="2 kg" required>
+              <p class="field-error" id="quantidade-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="destino">ONG</label>
+              <select id="destino" name="destino" required></select>
+              <p class="field-error" id="destino-error" hidden></p>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Registrar doação</button>
+        </form>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Alimento</th>
+                <th>Quantidade</th>
+                <th>ONG</th>
+                <th>Status</th>
+                <th data-for="ong">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="lista-doacoes"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="screen" id="mensagens" data-screen="mensagens" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Mensagens</p>
+          <h1>Conversas</h1>
+          <p>Combine a entrega sem sair do painel.</p>
+        </header>
+        <div class="inbox">
+          <ul class="thread-list" id="conversas"></ul>
+          <div class="thread">
+            <h2 id="conversa-titulo"></h2>
+            <div class="bubbles" id="bolhas"></div>
+            <form class="composer" id="form-mensagem">
+              <label class="sr-only" for="texto-mensagem">Mensagem</label>
+              <input id="texto-mensagem" name="texto" type="text" placeholder="Escreva uma mensagem" required>
+              <button class="btn btn-primary" type="submit">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="mapa" data-screen="mapa" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Mapa</p>
+          <h1>Onde estão as ONGs</h1>
+          <p>A lista segue a cidade e o bairro de cada organização.</p>
+        </header>
+        <div class="toolbar">
+          <button class="btn btn-outline" id="localizar" type="button">Usar minha localização</button>
+          <p class="form-status" id="localizacao" hidden></p>
+        </div>
+        <div class="card-list" id="lista-mapa"></div>
+      </section>
+    </main>
+
+    <script src="../../js/session.js" defer></script>
+    <script src="../../js/painel.js" defer></script>
+  </body>
+</html>

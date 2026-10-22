@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodTech - Entrar</title>
+  <meta name="description" content="Acesse sua conta FoodTech para doar alimentos ou gerenciar sua ONG.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/auth/login.css">
+</head>
+<body>
+  <main class="login-page">
+    <div class="login-card">
+      <div class="login-brand">
+        <svg class="login-brand-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 4C24 4 14 10 14 20C14 26.6274 18.4772 30 24 30C29.5228 30 34 26.6274 34 20C34 10 24 4 24 4Z" fill="#0F7D46"/>
+          <path d="M10 44C10 34 16 28 24 28C20 32 18 38 18 44H10Z" fill="#F57C00"/>
+        </svg>
+        <span class="login-brand-name">Food<span class="login-brand-accent">Tech</span></span>
+      </div>
+
+      <h1>Bem-vindo de volta</h1>
+      <p class="login-subtitle">Entre para continuar ajudando.</p>
+
+      <form id="login-form" novalidate>
+        <label for="email">E-mail</label>
+        <div class="login-input-wrapper">
+          <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="#8A8574" stroke-width="1.6">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 7l9 6 9-6"/>
+          </svg>
+          <input id="email" name="email" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+        </div>
+
+        <label for="password">Senha</label>
+        <div class="login-input-wrapper">
+          <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="#8A8574" stroke-width="1.6">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 118 0v3"/>
+          </svg>
+          <input id="password" name="password" type="password" placeholder="Sua senha" autocomplete="current-password" required>
+        </div>
+
+        <p id="login-error" class="login-error" hidden></p>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="login-footer-link">
+        Ainda não tem uma conta? <a href="register.html">Cadastre-se</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="../../js/auth/login.js"></script>
+</body>
+</html>
