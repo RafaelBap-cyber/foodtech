@@ -1,5 +1,8 @@
+// Cadastro de ONG (pages/ong/register.html).
 const form = document.querySelector("#register-form");
 const status = document.querySelector("#form-status");
+const submitButton = form.querySelector('button[type="submit"]');
+const foodOptions = document.querySelector("#food-options");
 
 function showFieldError(name, message) {
   const input = form.elements[name];
@@ -11,26 +14,81 @@ function showFieldError(name, message) {
   error.textContent = message || "";
 }
 
-form.addEventListener("submit", (event) => {
+function validateAddress({ street, number, city, state }) {
+  const errors = {};
+  if (!street) errors.street = "Informe a rua.";
+  if (!number) errors.number = "Informe o número.";
+  if (!city) errors.city = "Informe a cidade.";
+  if (!/^[A-Za-z]{2}$/.test(state)) errors.state = "Use 2 letras, como SP.";
+  return errors;
+}
+
+async function loadFoodTypes() {
+  try {
+    const { foodTypes } = await FoodTechApi.request("/api/food-types");
+    foodOptions.replaceChildren(...foodTypes.map((type) => {
+      const label = document.createElement("label");
+      label.className = "check";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "foodTypeIds";
+      input.value = type.id;
+      label.append(input, ` ${type.name}`);
+      return label;
+    }));
+  } catch (error) {
+    foodOptions.innerHTML = `<p class="field-hint">Não foi possível carregar os alimentos. Você pode cadastrar a ONG mesmo assim.</p>`;
+  }
+}
+
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   status.hidden = true;
   status.textContent = "";
 
-  const name = form.name.value.trim();
-  const email = form.email.value.trim();
-  const phone = form.phone.value.trim();
+  const value = (name) => form.elements[name].value.trim();
+  const name = value("name");
+  const email = value("email");
+  const phone = value("phone");
   const password = form.password.value;
-  const profile = form.dataset.profile;
-  const errors = FoodTechAuth.validateRegister({ name, email, phone, password });
+  const ong = {
+    street: value("street"),
+    number: value("number"),
+    neighborhood: value("neighborhood"),
+    city: value("city"),
+    state: value("state").toUpperCase(),
+    zipCode: value("zipCode"),
+    description: value("description"),
+    foodTypeIds: [...form.querySelectorAll('[name="foodTypeIds"]:checked')].map((input) => input.value),
+  };
 
-  showFieldError("name", errors.name);
-  showFieldError("email", errors.email);
-  showFieldError("phone", errors.phone);
-  showFieldError("password", errors.password);
+  const errors = {
+    ...FoodTechAuth.validateRegister({ name, email, phone, password }),
+    ...validateAddress(ong),
+  };
 
-  if (Object.keys(errors).length) return;
+  ["name", "email", "phone", "password", "street", "number", "city", "state"].forEach((field) => {
+    showFieldError(field, errors[field]);
+  });
 
-  const result = FoodTechAuth.register({ name, email, phone, profile });
-  status.hidden = false;
-  status.textContent = result.message;
+  if (Object.keys(errors).length) {
+    form.querySelector('[aria-invalid="true"]').focus();
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Cadastrando...";
+
+  try {
+    await FoodTechAuth.register({ userType: "ong", name, email, phone, password, ong });
+    window.location.href = "../painel/index.html";
+  } catch (error) {
+    status.hidden = false;
+    status.classList.add("is-error");
+    status.textContent = error.message || "Não foi possível criar a conta. Tente novamente.";
+    submitButton.disabled = false;
+    submitButton.textContent = "Cadastrar";
+  }
 });
+
+loadFoodTypes();

@@ -181,26 +181,44 @@ function renderDonations() {
 }
 
 
-$('password-form').addEventListener('submit', (event) => {
+$('password-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const form = event.target;
   const current = $('current-password').value;
   const next = $('new-password').value;
   const confirm = $('confirm-password').value;
   const msg = $('password-msg');
+  const button = form.querySelector('button[type="submit"]');
+
+  const showPasswordMsg = (text, type) => {
+    msg.className = `form-msg ${type}`;
+    msg.textContent = text;
+    msg.hidden = false;
+  };
 
   let error = '';
   if (!current) error = 'Informe sua senha atual.';
   else if (next.length < 6) error = 'A nova senha deve ter pelo menos 6 caracteres.';
   else if (next !== confirm) error = 'A confirmação não é igual à nova senha.';
 
-  msg.className = `form-msg ${error ? 'error' : 'ok'}`;
-  msg.textContent = error || 'Senha válida. A troca real será feita quando o back-end entrar.';
-  msg.hidden = false;
-  if (!error) event.target.reset();
+  if (error) {
+    showPasswordMsg(error, 'error');
+    return;
+  }
+
+  button.disabled = true;
+  try {
+    await profileService.changePassword(current, next);
+    showPasswordMsg('Senha alterada com sucesso!', 'ok');
+    form.reset();
+  } catch (err) {
+    showPasswordMsg(err.message || 'Não foi possível alterar a senha.', 'error');
+  } finally {
+    button.disabled = false;
+  }
 });
 
 $('logout-button').addEventListener('click', () => {
-  localStorage.removeItem('token');
   FoodTechSession.end();
   window.location.href = '../auth/login.html';
 });
@@ -224,5 +242,9 @@ async function loadProfile() {
   }
 }
 
-setEditing(false);
-loadProfile();
+if (!FoodTechSession.read()) {
+  window.location.replace('../auth/login.html');
+} else {
+  setEditing(false);
+  loadProfile();
+}

@@ -26,7 +26,7 @@
         <h1>Criar conta de ONG</h1>
         <p class="lede">Use esta conta para receber doações e falar com doadores.</p>
 
-        <form id="register-form" data-profile="ong" novalidate>
+        <form id="register-form" novalidate>
           <div class="field">
             <label for="name">Nome da ONG</label>
             <input id="name" name="name" type="text" autocomplete="organization" placeholder="Nome da organização" required>
@@ -47,18 +47,56 @@
             <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" required>
             <p class="field-error" id="password-error" hidden></p>
           </div>
+
+          <fieldset class="form-group">
+            <legend>Endereço</legend>
+            <p class="field-hint">Usado para mostrar a ONG no mapa.</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="street">Rua</label>
+                <input id="street" name="street" type="text" autocomplete="address-line1" placeholder="Rua das Flores" required>
+                <p class="field-error" id="street-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="number">Número</label>
+                <input id="number" name="number" type="text" inputmode="numeric" placeholder="100" required>
+                <p class="field-error" id="number-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="neighborhood">Bairro <span class="opcional">(opcional)</span></label>
+              <input id="neighborhood" name="neighborhood" type="text" placeholder="Centro">
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="city">Cidade</label>
+                <input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Sorocaba" required>
+                <p class="field-error" id="city-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="state">UF</label>
+                <input id="state" name="state" type="text" autocomplete="address-level1" maxlength="2" placeholder="SP" required>
+                <p class="field-error" id="state-error" hidden></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="zipCode">CEP <span class="opcional">(opcional)</span></label>
+              <input id="zipCode" name="zipCode" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000">
+            </div>
+          </fieldset>
+
           <div class="field">
-            <label for="address">Endereço completo</label>
-            <input id="address" name="address" type="text" autocomplete="street-address" placeholder="Rua, número, cidade">
-          </div>
-          <div class="field">
-            <label for="description">Descrição da ONG</label>
+            <label for="description">Descrição da ONG <span class="opcional">(opcional)</span></label>
             <input id="description" name="description" type="text" placeholder="Como a organização atua">
           </div>
-          <div class="field">
-            <label for="foods">Alimentos aceitos</label>
-            <input id="foods" name="foods" type="text" placeholder="arroz, feijão, leite">
-          </div>
+
+          <fieldset class="form-group">
+            <legend>Alimentos aceitos</legend>
+            <div class="food-options" id="food-options">
+              <p class="field-hint">Carregando...</p>
+            </div>
+          </fieldset>
+
           <button class="btn btn-primary btn-block" type="submit">Cadastrar</button>
           <p class="form-status" id="form-status" role="status" hidden></p>
         </form>
@@ -70,6 +108,8 @@
       </section>
     </main>
 
+    <script src="../../js/session.js" defer></script>
+    <script src="../../js/services/api.js" defer></script>
     <script src="../../js/services/authService.js" defer></script>
     <script src="../../js/register.js" defer></script>
   </body>
