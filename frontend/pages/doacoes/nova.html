@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nova doação — FoodTech</title>
+    <meta name="description" content="Registre uma doação de alimentos e escolha a ONG que vai recebê-la.">
+    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/donations.css">
+  </head>
+  <body class="app-body">
+    <a class="skip" href="#conteudo-doacoes">Ir para o conteúdo</a>
+
+    <header class="app-header">
+      <div class="app-bar">
+        <a class="logo" href="../painel/index.html#visao">
+          <img src="../../assets/logo.jpg" alt="" width="36" height="36">
+          <span>FoodTech</span>
+        </a>
+
+        <input class="menu-toggle" id="menu-toggle" type="checkbox">
+        <label class="menu-button" for="menu-toggle">
+          <span class="menu-lines" aria-hidden="true"></span>
+          Menu
+        </label>
+
+        <div class="app-tools">
+          <nav class="app-nav" aria-label="Ações do painel">
+            <a href="../painel/index.html#visao">Visão geral</a>
+            <a href="../painel/index.html#ongs">ONGs</a>
+            <a href="index.html" aria-current="page">Doações</a>
+            <a href="../painel/index.html#mensagens">Mensagens</a>
+            <a href="../painel/index.html#mapa">Mapa</a>
+          </nav>
+          <div class="app-user">
+            <p class="user-chip">
+              <span id="user-name"></span>
+              <small id="user-role"></small>
+            </p>
+            <button class="btn btn-outline btn-small" id="sair" type="button">Sair</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div id="conteudo-doacoes">
+        <section class="screen" id="tela-nova">
+          <a class="back-link" href="index.html">← Minhas doações</a>
+          <header class="screen-head">
+            <p class="eyebrow">Doações</p>
+            <h1>Nova doação</h1>
+            <p>Informe o que você quer doar e escolha a ONG que vai receber.</p>
+          </header>
+
+          <form class="work-card doacao-form" id="form-doacao" novalidate>
+            <div class="field">
+              <label for="ong_id">ONG</label>
+              <select id="ong_id" name="ong_id" required>
+                <option value="">Carregando ONGs...</option>
+              </select>
+              <p class="field-error" id="ong_id-error" hidden></p>
+            </div>
+
+            <fieldset class="doacao-itens">
+              <legend>Itens da doação</legend>
+              <p class="field-hint">Adicione um item para cada tipo de alimento.</p>
+              <div id="lista-itens"></div>
+              <p class="field-error" id="itens-error" hidden></p>
+              <button class="btn btn-outline btn-small" id="add-item" type="button">+ Adicionar item</button>
+            </fieldset>
+
+            <div class="field">
+              <label for="description">Observações <span class="opcional">(opcional)</span></label>
+              <textarea id="description" name="description" placeholder="Validade, melhor horário para retirada, local..."></textarea>
+              <p class="field-count" id="contador" aria-hidden="true">0/300</p>
+              <p class="field-error" id="description-error" hidden></p>
+            </div>
+
+            <p class="form-status is-error" id="form-status" role="alert" hidden></p>
+
+            <div class="doacao-acoes">
+              <a class="btn btn-outline" href="index.html">Cancelar</a>
+              <button class="btn btn-primary" id="enviar" type="submit">Registrar doação</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="screen" id="tela-sucesso" hidden>
+          <div class="work-card doacao-form">
+            <p class="eyebrow">Doações</p>
+            <h1 id="sucesso-titulo" tabindex="-1">Doação registrada</h1>
+            <p class="form-status" id="sucesso-texto" role="status"></p>
+            <div class="doacao-acoes">
+              <button class="btn btn-outline" id="outra-doacao" type="button">Registrar outra</button>
+              <a class="btn btn-outline" href="index.html">Minhas doações</a>
+              <a class="btn btn-primary" id="ver-detalhes" href="detalhe.html">Ver detalhes</a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="screen" id="aviso-perfil" hidden>
+        <header class="screen-head">
+          <p class="eyebrow">Doações</p>
+          <h1>Área do doador</h1>
+          <p>Esta tela é para quem quer doar. Para ver as doações recebidas pela sua organização, use o painel.</p>
+        </header>
+        <a class="btn btn-primary" href="../painel/index.html#doacoes">Ir para o painel</a>
+      </section>
+    </main>
+
+    <template id="modelo-item">
+      <div class="doacao-item" data-item>
+        <div class="field">
+          <label data-rotulo="food_type_id">Alimento</label>
+          <select name="food_type_id" required></select>
+        </div>
+        <div class="field">
+          <label data-rotulo="quantity">Quantidade</label>
+          <input name="quantity" type="number" inputmode="decimal" min="0.01" max="99999999.99" step="any" placeholder="Ex.: 2" required>
+        </div>
+        <div class="field">
+          <label data-rotulo="unit">Unidade</label>
+          <select name="unit" required></select>
+        </div>
+        <button class="btn-remover" type="button" data-remover>Remover</button>
+        <p class="field-error" data-erro hidden></p>
+      </div>
+    </template>
+
+    <script src="../../js/session.js" defer></script>
+    <script src="../../js/services/api.js" defer></script>
+    <script src="../../js/services/donationService.js" defer></script>
+    <script src="../../js/doacoes-base.js" defer></script>
+    <script src="../../js/doacao-nova.js" defer></script>
+  </body>
+</html>
