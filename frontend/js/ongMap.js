@@ -2,13 +2,29 @@ const FoodTechOngMap = {
   centroPadrao: [-23.5015, -47.4526],
 
   temCoordenadas(ong) {
-    return (
-      ong.latitude !== null &&
-      ong.longitude !== null &&
-      Number.isFinite(Number(ong.latitude)) &&
-      Number.isFinite(Number(ong.longitude))
-    );
-  },
+  if (
+    ong.latitude === null ||
+    ong.latitude === undefined ||
+    ong.longitude === null ||
+    ong.longitude === undefined ||
+    String(ong.latitude).trim() === "" ||
+    String(ong.longitude).trim() === ""
+  ) {
+    return false;
+  }
+
+  const latitude = Number(ong.latitude);
+  const longitude = Number(ong.longitude);
+
+  return (
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude) &&
+    latitude >= -90 &&
+    latitude <= 90 &&
+    longitude >= -180 &&
+    longitude <= 180
+  );
+},
 
   // Cria o mapa no elemento indicado e enquadra todas as ONGs com coordenadas.
   criar(elementId, ongs) {

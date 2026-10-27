@@ -1,3 +1,4 @@
+
 function criarElemento(tag, className, texto) {
   const elemento = document.createElement(tag);
   if (className) elemento.className = className;
@@ -5,8 +6,12 @@ function criarElemento(tag, className, texto) {
   return elemento;
 }
 
+let todasAsOngs = [];
+let mapaAtual = null;
+
 function renderizarLista(ongs) {
   const lista = document.querySelector("#ong-list");
+  lista.replaceChildren();
 
   ongs.forEach((ong) => {
     const card = criarElemento("a", "map-ong-card");
@@ -17,6 +22,7 @@ function renderizarLista(ongs) {
       criarElemento("h3", "", ong.nome),
       criarElemento("p", "", ong.endereco || "Endereço não informado")
     );
+
     (ong.alimentosAceitos || []).forEach((alimento) => {
       informacoes.appendChild(criarElemento("span", "map-tag", alimento));
     });
@@ -25,7 +31,44 @@ function renderizarLista(ongs) {
     lista.appendChild(card);
   });
 
-  document.querySelector("#ong-count").textContent = `${ongs.length} instituições`;
+  document.querySelector("#ong-count").textContent =
+    `${ongs.length} ${ongs.length === 1 ? "instituição" : "instituições"}`;
+}
+
+function renderizarMapa(ongs) {
+  if (mapaAtual) {
+    mapaAtual.remove();
+  }
+
+  mapaAtual = FoodTechOngMap.criar("mapa", ongs);
+}
+
+function exibirOngs(ongs) {
+  renderizarMapa(ongs);
+  renderizarLista(ongs);
+}
+
+function filtrarPorAlimento() {
+  const campo = document.querySelector("#filtro-alimento");
+  const alimento = campo.value.trim().toLocaleLowerCase("pt-BR");
+
+  if (!alimento) {
+    exibirOngs(todasAsOngs);
+    return;
+  }
+
+  const resultado = todasAsOngs.filter((ong) =>
+    (ong.alimentosAceitos || []).some((item) =>
+      String(item).toLocaleLowerCase("pt-BR").includes(alimento)
+    )
+  );
+
+  exibirOngs(resultado);
+}
+
+function limparFiltro() {
+  document.querySelector("#filtro-alimento").value = "";
+  exibirOngs(todasAsOngs);
 }
 
 async function carregarMapa() {
@@ -34,13 +77,36 @@ async function carregarMapa() {
   status.hidden = false;
 
   try {
-    const ongs = await FoodTechOngs.list();
-    FoodTechOngMap.criar("mapa", ongs);
-    renderizarLista(ongs);
+    todasAsOngs = await FoodTechOngs.list();
+
+    if (!Array.isArray(todasAsOngs)) {
+      throw new Error("A API não retornou uma lista de ONGs.");
+    }
+
+    exibirOngs(todasAsOngs);
     status.hidden = true;
   } catch (erro) {
+    console.error("Erro ao carregar as ONGs:", erro);
     status.textContent = "Não foi possível carregar as ONGs.";
+    status.hidden = false;
   }
 }
 
+document
+  .querySelector("#btn-filtrar-alimento")
+  .addEventListener("click", filtrarPorAlimento);
+
+document
+  .querySelector("#btn-limpar-filtro")
+  .addEventListener("click", limparFiltro);
+
+document
+  .querySelector("#filtro-alimento")
+  .addEventListener("keydown", (evento) => {
+    if (evento.key === "Enter") {
+      filtrarPorAlimento();
+    }
+  });
+
 carregarMapa();
+
