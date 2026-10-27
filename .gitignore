@@ -1,2 +1,5 @@
 .env
 **/.env
+# Arquivos gerados localmente
+frontend/node_modules/
+frontend/dist/
