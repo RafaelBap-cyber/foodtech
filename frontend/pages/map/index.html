@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -29,27 +30,47 @@
       </section>
 
       <section class="map-section">
-        <div class="map-section-title">
-          <h2>Mapa de instituições</h2>
-          <span id="ong-count"></span>
+        <h2>Instituições cadastradas</h2>
+
+        <div class="map-filter">
+          <label for="filtro-alimento">Filtrar por alimento</label>
+          <div class="map-filter-controls">
+            <input
+              type="text"
+              id="filtro-alimento"
+              placeholder="Ex.: arroz, leite, feijão..."
+            >
+            <button type="button" id="btn-filtrar-alimento">Filtrar</button>
+            <button type="button" id="btn-limpar-filtro">Limpar</button>
+          </div>
+        </div>
+
+        <div class="map-filter">
+          <label for="filtro-distancia">Buscar ONGs por distância</label>
+          <div class="map-filter-controls">
+            <select id="filtro-distancia">
+              <option value="">Selecione a distância</option>
+              <option value="5">Até 5 km</option>
+              <option value="10">Até 10 km</option>
+              <option value="20">Até 20 km</option>
+              <option value="50">Até 50 km</option>
+            </select>
+            <button type="button" id="btn-filtrar-distancia">
+              Usar minha localização
+            </button>
+            <button type="button" id="btn-limpar-distancia">
+              Limpar distância
+            </button>
+          </div>
+          <p id="status-distancia" role="status" hidden></p>
         </div>
 
         <p class="form-status" id="status-msg" role="status" hidden></p>
+
         <div id="mapa"></div>
+
+        <div class="map-ong-list" id="ong-list"></div>
       </section>
-
-     <section class="map-section"> <h2>Instituições cadastradas</h2>
-
-     <div class="map-filter"> <label for="filtro-alimento">Filtrar por alimento</label> <div class="map-filter-controls"> <input type="text" id="filtro-alimento" placeholder="Ex.: arroz, leite, feijão..." > <button type="button" id="btn-filtrar-alimento">Filtrar</button> <button type="button" id="btn-limpar-filtro">Limpar</button> </div> </div>
-
-      <div class="map-ong-list" id="ong-list"></div> </section>
-
-
-
-
-
-
-
 
       <footer class="map-footer">
         FoodTech · Conectando pessoas e alimentos
