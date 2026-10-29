@@ -53,7 +53,6 @@ function renderizarLista(ongs) {
         criarElemento("span", "map-tag", alimento)
       );
     });
-
     card.append(
       criarElemento("div", "map-ong-icon", "📍"),
       informacoes
@@ -211,9 +210,11 @@ function filtrarPorDistancia() {
       localizacaoUsuario = {
         latitude: posicao.coords.latitude,
         longitude: posicao.coords.longitude,
-      };
-      distanciaMaxima = valor;
-      atualizarExibicao();
+    };
+
+    distanciaMaxima = valor;
+    atualizarExibicao();
+
       mostrarStatusDistancia(
         `Exibindo ONGs em até ${valor} km da sua localização.`
       );
@@ -241,7 +242,6 @@ function filtrarPorDistancia() {
 
 function limparFiltroDistancia() {
   document.querySelector("#filtro-distancia").value = "";
-  localizacaoUsuario = null;
   distanciaMaxima = null;
 
   const status = document.querySelector("#status-distancia");
