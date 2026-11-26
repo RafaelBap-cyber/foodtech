@@ -116,17 +116,19 @@ h3 {
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.5rem;
   text-decoration: none;
   font-weight: 700;
   font-size: 1.25rem;
-  color: var(--green);
+  color: #0f7d46;
 }
 
 .logo img {
   object-fit: contain;
-  border-radius: 12px;
-  background: #fff;
+}
+
+.logo-accent {
+  color: #f57c00;
 }
 
 .menu-toggle {
