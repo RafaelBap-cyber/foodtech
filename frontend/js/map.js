@@ -1,10 +1,3 @@
-function criarElemento(tag, className, texto) {
-  const elemento = document.createElement(tag);
-  if (className) elemento.className = className;
-  if (texto) elemento.textContent = texto;
-  return elemento;
-}
-
 let todasAsOngs = [];
 let mapaAtual = null;
 let localizacaoUsuario = null;
@@ -13,51 +6,28 @@ let alimentoSelecionado = "";
 
 function renderizarLista(ongs) {
   const lista = document.querySelector("#ong-list");
-  lista.replaceChildren();
 
-  ongs.forEach((ong) => {
-    const card = criarElemento("a", "map-ong-card");
-    card.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
+  lista.replaceChildren(
+    ...ongs.map((ong) => {
+      // Mostra a distância quando a localização do usuário está disponível.
+      let distancia = "";
+      if (localizacaoUsuario && FoodTechOngMap.temCoordenadas(ong)) {
+        const km = calcularDistanciaKm(
+          localizacaoUsuario.latitude,
+          localizacaoUsuario.longitude,
+          Number(ong.latitude),
+          Number(ong.longitude)
+        );
+        distancia = `${km.toLocaleString("pt-BR", { maximumFractionDigits: 1 })} km de você`;
+      }
 
-    const informacoes = criarElemento("div", "map-ong-info");
-
-    informacoes.append(
-      criarElemento("h3", "", ong.nome),
-      criarElemento("p", "", ong.endereco || "Endereço não informado")
-    );
-
-    // Mostra a distância quando a localização do usuário está disponível.
-    if (localizacaoUsuario && FoodTechOngMap.temCoordenadas(ong)) {
-      const distancia = calcularDistanciaKm(
-        localizacaoUsuario.latitude,
-        localizacaoUsuario.longitude,
-        Number(ong.latitude),
-        Number(ong.longitude)
-      );
-
-      informacoes.appendChild(
-        criarElemento(
-          "p",
-          "map-ong-distance",
-          `📍 Distância: ${distancia.toLocaleString("pt-BR", {
-            maximumFractionDigits: 1,
-          })} km`
-        )
-      );
-    }
-
-    (ong.alimentosAceitos || []).forEach((alimento) => {
-      informacoes.appendChild(
-        criarElemento("span", "map-tag", alimento)
-      );
-    });
-    card.append(
-      criarElemento("div", "map-ong-icon", "📍"),
-      informacoes
-    );
-
-    lista.appendChild(card);
-  });
+      return FoodTechUI.ongCard(ong, {
+        href: `../ong/profile.html?id=${encodeURIComponent(ong.id)}`,
+        distance: distancia,
+        headingLevel: "h3",
+      });
+    })
+  );
 
   const contador = document.querySelector("#ong-count");
 
@@ -133,15 +103,14 @@ function atualizarExibicao() {
   const lista = document.querySelector("#ong-list");
 
   if (resultado.length === 0) {
-    const mensagem = criarElemento(
-      "p",
-      "map-empty-message",
-      distanciaMaxima !== null
-        ? `Nenhuma ONG encontrada em até ${distanciaMaxima} km. Tente aumentar a distância ou limpar o filtro.`
-        : "Nenhuma ONG encontrada para esse filtro."
+    lista.appendChild(
+      FoodTechUI.emptyState(
+        "Nenhuma ONG encontrada",
+        distanciaMaxima !== null
+          ? `Nenhuma ONG em até ${distanciaMaxima} km. Tente aumentar a distância ou limpar o filtro.`
+          : "Nenhuma ONG aceita esse alimento ainda. Tente outro termo."
+      )
     );
-
-    lista.appendChild(mensagem);
   }
 }
 
@@ -164,7 +133,7 @@ function mostrarStatusDistancia(mensagem, erro = false) {
   const status = document.querySelector("#status-distancia");
   status.textContent = mensagem;
   status.hidden = false;
-  status.style.color = erro ? "#b42318" : "";
+  status.classList.toggle("is-error", erro);
 }
 
 function filtrarPorDistancia() {
