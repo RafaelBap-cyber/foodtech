@@ -1,4 +1,3 @@
-
 function criarElemento(tag, className, texto) {
   const elemento = document.createElement(tag);
   if (className) elemento.className = className;
@@ -11,7 +10,6 @@ let mapaAtual = null;
 let localizacaoUsuario = null;
 let distanciaMaxima = null;
 let alimentoSelecionado = "";
-
 
 function renderizarLista(ongs) {
   const lista = document.querySelector("#ong-list");
@@ -69,8 +67,6 @@ function renderizarLista(ongs) {
   }
 }
 
-
-
 function renderizarMapa(ongs) {
   if (mapaAtual) {
     mapaAtual.remove();
@@ -121,24 +117,12 @@ function obterOngsFiltradas() {
         Number(ong.longitude)
       );
 
-      console.log("ONG:", ong.nome);
-      console.log("Coordenadas da ONG:", ong.latitude, ong.longitude);
-      console.log("Sua localização:", localizacaoUsuario);
-      console.log("Distância calculada:", distancia, "km");
-
-
-
-
-
-
-
       return distancia <= distanciaMaxima;
     });
   }
 
   return resultado;
 }
-
 
 function atualizarExibicao() {
   const resultado = obterOngsFiltradas();
@@ -160,8 +144,6 @@ function atualizarExibicao() {
     lista.appendChild(mensagem);
   }
 }
-
-
 
 function filtrarPorAlimento() {
   alimentoSelecionado = document
@@ -203,24 +185,21 @@ function filtrarPorDistancia() {
     return;
   }
   mostrarStatusDistancia("Obtendo sua localização...");
-  console.log("Iniciando solicitação de localização...");
   navigator.geolocation.getCurrentPosition(
     (posicao) => {
-      console.log("Localização obtida:", posicao.coords.latitude, posicao.coords.longitude);
       localizacaoUsuario = {
         latitude: posicao.coords.latitude,
         longitude: posicao.coords.longitude,
-    };
+      };
 
-    distanciaMaxima = valor;
-    atualizarExibicao();
+      distanciaMaxima = valor;
+      atualizarExibicao();
 
       mostrarStatusDistancia(
         `Exibindo ONGs em até ${valor} km da sua localização.`
       );
     },
     (erro) => {
-      console.log("Erro de localização recebido:", erro.code, erro.message);
       console.error("Erro ao obter localização:", erro);
       const mensagens = {
         1: "Permita o acesso à localização no navegador para usar este filtro.",

@@ -2,9 +2,7 @@ const FoodTechOngs = {
   async list(alimento) {
     const query = alimento ? `?alimento=${encodeURIComponent(alimento)}` : "";
     const data = await FoodTechApi.request(`/api/ongs${query}`);
-console.log("Resposta completa da API:", data);
-return data.ongs;
-
+    return data.ongs;
   },
 
   async get(id) {
