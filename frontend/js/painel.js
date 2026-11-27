@@ -70,19 +70,35 @@ function renderMetrics() {
   const pending = donations.filter((item) => item.status === "pending").length;
   const items = isOng
     ? [
-        [String(donations.length), "Doações recebidas"],
-        [String(pending), "Aguardando resposta"],
-        [String(ongs.length), "ONGs na rede"],
+        [donations.length, "Doações recebidas", "box"],
+        [pending, "Aguardando resposta", "clock"],
+        [ongs.length, "ONGs na rede", "home"],
       ]
     : [
-        [String(donations.length), "Doações registradas"],
-        [String(pending), "Ainda pendentes"],
-        [String(ongs.length), "ONGs disponíveis"],
+        [donations.length, "Doações registradas", "box"],
+        [pending, "Ainda pendentes", "clock"],
+        [ongs.length, "ONGs disponíveis", "home"],
       ];
 
-  document.querySelector("#metricas").innerHTML = items
-    .map(([value, label]) => `<article><strong>${value}</strong><span>${label}</span></article>`)
-    .join("");
+  const root = document.querySelector("#metricas");
+  const primeiraVez = !root.children.length;
+
+  root.replaceChildren(...items.map(([value, label, icon]) => {
+    const card = element("article", "metric");
+    const iconBox = element("span", "metric-icon");
+    iconBox.setAttribute("aria-hidden", "true");
+    iconBox.append(FoodTechUI.icon(icon));
+
+    const number = element("strong", "", String(value));
+    number.dataset.count = value;
+    const text = element("div");
+    text.append(number, element("span", "", label));
+
+    card.append(iconBox, text);
+    // Anima só os números que chegaram da API (não o 0 inicial).
+    if (!primeiraVez && value > 0) FoodTechUI.countUp(number);
+    return card;
+  }));
 }
 
 function element(tag, className, text) {
@@ -107,27 +123,42 @@ function renderOngs(query) {
   root.replaceChildren(...list.map((ong) => {
     const mine = ong.id === session.ongId;
     const card = element("article", "work-card");
-    const link = element("a", "text-link", mine ? "Ver perfil público" : "Ver detalhes");
-    link.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
 
-    card.append(
-      element("p", "choice-kicker", mine ? "Sua ONG" : ong.cidade),
+    const head = element("div", "ong-card-head");
+    const titulo = element("div");
+    titulo.append(
       element("h2", "", ong.nome),
-      element("p", "", ong.alimentosAceitos.join(", ") || "Alimentos aceitos não informados"),
-      link
+      element("span", "ong-card-city", mine ? "Sua ONG" : ong.cidade)
     );
+    head.append(FoodTechUI.avatar(ong.nome), titulo);
+
+    const tags = element("div", "ong-card-tags");
+    if (ong.alimentosAceitos.length) {
+      ong.alimentosAceitos.forEach((item) => tags.append(element("span", "tag", item)));
+    } else {
+      tags.append(element("span", "tag tag-more", "Alimentos não informados"));
+    }
+
+    // Ações sempre no rodapé do card, alinhadas entre os cards.
+    const actions = element("div", "card-actions");
+    const perfil = element("a", "btn btn-outline btn-small", mine ? "Ver perfil público" : "Ver detalhes");
+    perfil.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
 
     if (session.profile === "donor") {
-      const doar = element("a", "text-link", "Doar para esta ONG");
+      const doar = element("a", "btn btn-primary btn-small", "Doar");
       doar.href = `../doacoes/nova.html?ong=${encodeURIComponent(ong.id)}`;
-      card.append(" · ", doar);
+      actions.append(doar, perfil);
 
       if (ong.profileId) {
-        const mensagem = element("a", "text-link", "Mensagem");
+        const mensagem = element("a", "btn btn-ghost btn-small", "Mensagem");
         mensagem.href = `?conversa=${encodeURIComponent(ong.profileId)}#mensagens`;
-        card.append(" · ", mensagem);
+        actions.append(mensagem);
       }
+    } else {
+      actions.append(perfil);
     }
+
+    card.append(head, tags, actions);
     return card;
   }));
 }
@@ -320,20 +351,10 @@ function renderMapList(lista) {
   root.innerHTML = "";
 
   lista.forEach((ong) => {
-    const card = document.createElement("article");
-    card.className = "work-card";
-
-    const titulo = document.createElement("h2");
-    titulo.textContent = ong.nome;
-    const endereco = document.createElement("p");
-    endereco.textContent = ong.endereco || "Endereço não informado";
-    const link = document.createElement("a");
-    link.className = "text-link";
-    link.href = `../ong/profile.html?id=${encodeURIComponent(ong.id)}`;
-    link.textContent = "Ver detalhes";
-
-    card.append(titulo, endereco, link);
-    root.appendChild(card);
+    root.appendChild(FoodTechUI.ongCard(ong, {
+      href: `../ong/profile.html?id=${encodeURIComponent(ong.id)}`,
+      headingLevel: "h3",
+    }));
   });
 }
 
