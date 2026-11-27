@@ -1,0 +1,335 @@
+/* Telas de entrada e cadastro: painel da marca + formulário.
+   Depende dos tokens e componentes de css/styles.css. */
+
+.auth-body {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.auth-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  min-height: 100vh;
+}
+
+/* ---------- Painel da marca ---------- */
+
+.auth-aside {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1rem;
+}
+
+.auth-aside-inner {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: clamp(1.75rem, 3.5vw, 3rem);
+  border-radius: var(--r-xl);
+  background: var(--mint);
+  isolation: isolate;
+}
+
+.auth-aside-inner.is-ong {
+  background: var(--butter);
+}
+
+.auth-aside-inner::before,
+.auth-aside-inner::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.auth-aside-inner::before {
+  width: 380px;
+  height: 380px;
+  right: -140px;
+  top: 18%;
+  background: rgba(255, 255, 255, 0.45);
+  animation: drift 14s ease-in-out infinite;
+}
+
+.auth-aside-inner::after {
+  width: 220px;
+  height: 220px;
+  left: -60px;
+  bottom: -70px;
+  background: rgba(255, 138, 101, 0.35);
+  animation: drift 18s ease-in-out infinite reverse;
+}
+
+.auth-aside .logo-mark {
+  background: var(--white);
+}
+
+.auth-aside-copy {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: rise 0.8s 0.1s var(--ease) both;
+}
+
+.auth-aside-copy h2 {
+  max-width: 14ch;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.04;
+}
+
+.auth-aside-copy p {
+  max-width: 30rem;
+  color: #3d4d44;
+  font-size: 1.08rem;
+}
+
+.auth-quote {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 30rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--r-lg);
+  background: var(--white);
+  box-shadow: 0 6px 0 rgba(35, 49, 42, 0.08);
+  animation: pop 0.8s 0.35s var(--ease-bounce) both, bob 7s 1.2s ease-in-out infinite;
+}
+
+.auth-quote .tile-icon {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 16px;
+  background: var(--coral);
+}
+
+.auth-quote strong {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.auth-quote span {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+/* ---------- Área do formulário ---------- */
+
+.auth-main {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem clamp(1.25rem, 4vw, 3.5rem) 3rem;
+}
+
+.auth-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 52px;
+}
+
+.auth-top .logo {
+  display: none;
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 800;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.auth-back svg {
+  width: 18px;
+  height: 18px;
+  transform: rotate(180deg);
+  transition: transform 0.25s var(--ease);
+}
+
+.auth-back:hover {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.auth-back:hover svg {
+  transform: rotate(180deg) translateX(3px);
+}
+
+.auth-card {
+  width: min(460px, 100%);
+  margin: auto;
+  padding-top: 2rem;
+  animation: rise 0.6s var(--ease) both;
+}
+
+.auth-card.is-wide {
+  width: min(620px, 100%);
+}
+
+.auth-card h1 {
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+}
+
+.auth-card > .lede,
+.auth-subtitle {
+  margin: 0.6rem 0 1.75rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.auth-card form .btn-block {
+  margin-top: 0.6rem;
+}
+
+/* Abas Doador / ONG */
+.auth-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-bottom: 1.75rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--line-soft);
+}
+
+.auth-switch a {
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 800;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.auth-switch a:hover {
+  color: var(--ink);
+}
+
+.auth-switch a[aria-current="page"] {
+  background: var(--green);
+  color: var(--white);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 2px dashed var(--line);
+}
+
+.auth-footer-links {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Mensagens dos scripts de login/cadastro do doador */
+.login-error {
+  margin: 0.2rem 0 0.6rem;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.92rem;
+  font-weight: 700;
+  animation: shake 0.35s ease;
+}
+
+.register-errors {
+  margin: 0.2rem 0 0.6rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.92rem;
+  animation: rise 0.35s var(--ease) both;
+}
+
+.register-errors strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 900;
+}
+
+.register-errors ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.register-errors li {
+  margin: 0.15rem 0;
+  font-weight: 700;
+}
+
+/* ---------- Escolha de perfil ---------- */
+
+.signup-choice {
+  width: min(820px, 100%);
+}
+
+.signup-choice .choice-grid {
+  margin-top: 0.5rem;
+}
+
+.choice-card-ong .audience-icon {
+  background: var(--butter);
+  color: var(--ink);
+}
+
+.choice-card .choice-kicker {
+  margin: 0.4rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .signup-choice .choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 960px) {
+  .auth-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-aside {
+    display: none;
+  }
+
+  .auth-top .logo {
+    display: inline-flex;
+  }
+
+  .auth-card {
+    margin-top: 1rem;
+  }
+}

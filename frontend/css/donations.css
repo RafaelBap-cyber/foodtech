@@ -1,90 +1,27 @@
-.status-completed {
-  background: var(--green-soft);
-  color: var(--green-dark);
-}
-
-.field select,
-.field textarea {
-  width: 100%;
-  border: 1.5px solid #d5dbd4;
-  background: var(--white);
-  border-radius: 14px;
-  min-height: 50px;
-  padding: 0.75rem 0.9rem;
-  font: inherit;
-  color: var(--ink);
-}
+/* Telas de doação (pages/doacoes/).
+   Campos, botões, tabela e status vêm de css/styles.css. */
 
 .field textarea {
-  min-height: 104px;
+  min-height: 112px;
   resize: vertical;
   line-height: 1.5;
 }
 
-.field select[aria-invalid="true"],
-.field textarea[aria-invalid="true"] {
-  border-color: var(--danger);
-}
-
-.field select:focus-visible,
-.field textarea:focus-visible,
-.toolbar select:focus-visible,
-.btn-remover:focus-visible {
-  outline: 3px solid rgba(15, 112, 70, 0.28);
-  outline-offset: 2px;
-}
-
-.toolbar select {
-  min-height: 46px;
-  border: 1.5px solid #d5dbd4;
-  border-radius: 12px;
-  background: var(--white);
-  padding: 0.7rem 0.85rem;
-  font: inherit;
-  color: var(--ink);
-}
-
-.form-status.is-error {
-  background: #f8e8e6;
-  color: var(--danger);
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* ---------- Cabeçalho da tela ---------- */
-
-.screen-head-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.back-link {
-  display: inline-block;
-  margin-bottom: 0.8rem;
-  color: var(--green);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.back-link:hover {
-  color: var(--green-dark);
+.field-count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: right;
 }
 
 /* ---------- Cadastro ---------- */
 
 .doacao-form {
-  max-width: 760px;
-  padding: 1.4rem;
+  max-width: 780px;
+  padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-/* O styles.css pinta todo "p" dentro de .work-card de cinza (.work-card p),
-   o que vence .field-error e .form-status. Estas regras devolvem as cores. */
+/* .work-card p deixa todo parágrafo cinza; estas regras devolvem as cores. */
 .doacao-form .field-error {
   margin-top: 0.1rem;
   color: var(--danger);
@@ -102,39 +39,22 @@
   color: var(--danger);
 }
 
-.field-hint,
-.field-count {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.field-count {
-  text-align: right;
-}
-
-.field label .opcional {
-  color: var(--muted);
-  font-weight: 400;
-}
-
 .doacao-itens {
-  margin: 0 0 1.1rem;
-  padding: 1rem;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: #fbfbf8;
   min-width: 0;
+  margin: 0 0 1.2rem;
+  padding: 1.1rem;
+  border: 2px solid var(--line-soft);
+  border-radius: 20px;
+  background: var(--cream);
 }
 
 .doacao-itens legend {
-  padding: 0 0.4rem;
-  font-weight: 600;
-  font-size: 0.92rem;
+  padding: 0 0.5rem;
+  font-weight: 900;
 }
 
 .doacao-itens > .field-hint {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.9rem;
 }
 
 .doacao-item {
@@ -144,11 +64,12 @@
   grid-auto-columns: auto;
   gap: 0.8rem;
   align-items: start;
-  padding: 0.9rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+  padding: 1rem;
+  border-radius: 18px;
   background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--line-soft);
+  animation: rise 0.35s var(--ease) both;
 }
 
 .doacao-item .field {
@@ -163,19 +84,21 @@
   grid-column: 4;
   grid-row: 1;
   align-self: end;
-  min-height: 50px;
+  min-height: 52px;
   padding: 0.5rem 1rem;
-  border: 1.5px solid var(--danger);
+  border: 0;
   border-radius: 14px;
   background: var(--white);
+  box-shadow: inset 0 0 0 2px var(--line);
   color: var(--danger);
-  font: inherit;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-remover:hover {
-  background: #f8e8e6;
+  background: var(--danger-soft);
+  box-shadow: inset 0 0 0 2px var(--danger);
 }
 
 .btn-remover[hidden] {
@@ -187,18 +110,23 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.7rem;
-  margin-top: 1.2rem;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 2px dashed var(--line-soft);
 }
 
 /* ---------- Listagem ---------- */
 
 .doacao-resumo {
   max-width: 28rem;
+  font-weight: 700;
 }
 
 .doacao-resumo small {
   display: block;
+  margin-top: 0.15rem;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .data-table .text-link {
@@ -210,35 +138,40 @@
 .doacao-detalhe {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 0.8rem;
+  gap: 1rem;
   align-items: start;
 }
 
 .doacao-detalhe .work-card h2 {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.doacao-detalhe .table-wrap {
+  box-shadow: inset 0 0 0 2px var(--line-soft);
 }
 
 .info-list {
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
   margin: 0;
 }
 
 .info-list dt {
   color: var(--muted);
   font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .info-list dd {
   margin: 0.1rem 0 0;
+  font-weight: 700;
   overflow-wrap: anywhere;
 }
 
 .detalhe-conversar {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 /* ---------- Telas menores ---------- */
@@ -250,10 +183,6 @@
 }
 
 @media (max-width: 640px) {
-  .doacao-form {
-    padding: 1rem;
-  }
-
   .doacao-item {
     grid-template-columns: 1fr 1fr;
   }

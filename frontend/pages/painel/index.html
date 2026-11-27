@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Painel — FoodTech</title>
     <meta name="description" content="Painel do FoodTech para registrar doações, acompanhar ONGs e trocar mensagens.">
-    <link rel="icon" href="../../assets/logo.jpg" type="image/jpeg">
+    <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="../../css/styles.css">
   </head>
@@ -18,8 +18,8 @@
     <header class="app-header">
       <div class="app-bar">
         <a class="logo" href="#visao" data-view="visao">
-          <img src="../../assets/logo.jpg" alt="" width="36" height="36">
-          <span>FoodTech</span>
+          <span class="logo-mark"><img src="../../assets/logo.svg" alt="" width="26" height="26"></span>
+          <span>Food<span class="logo-accent">Tech</span></span>
         </a>
 
         <input class="menu-toggle" id="menu-toggle" type="checkbox">
@@ -38,8 +38,7 @@
           </nav>
           <div class="app-user">
             <p class="user-chip">
-              <span id="user-name"></span>
-              <small id="user-role"></small>
+              <span><strong id="user-name"></strong><small id="user-role"></small></span>
             </p>
             <a class="btn btn-outline btn-small" href="../user/profile.html" data-for="donor">Meu perfil</a>
             <button class="btn btn-outline btn-small" id="sair" type="button">Sair</button>
@@ -50,30 +49,41 @@
 
     <main class="app-main" id="painel">
       <section class="screen" id="visao" data-screen="visao">
-        <header class="screen-head">
-          <p class="eyebrow">Painel</p>
-          <h1 id="visao-titulo">Visão geral</h1>
-          <p id="visao-texto"></p>
-        </header>
+        <div class="welcome">
+          <header class="screen-head">
+            <p class="eyebrow">Painel</p>
+            <h1 id="visao-titulo">Visão geral</h1>
+            <p id="visao-texto"></p>
+          </header>
+        </div>
         <div class="metric-grid" id="metricas"></div>
+        <h2 class="section-title">Atalhos</h2>
         <div class="shortcut-grid">
           <a class="shortcut" href="#doacoes" data-view="doacoes">
+            <span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8 12 4l8 4v8l-8 4-8-4V8Z"/><path d="m4 8 8 4 8-4M12 12v8"/></svg></span>
             <strong>Doações</strong>
             <span data-for="donor">Registrar e acompanhar suas doações.</span>
             <span data-for="ong">Aceitar ou recusar o que chegou.</span>
+            <svg class="shortcut-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
           <a class="shortcut" href="#ongs" data-view="ongs">
+            <span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10l8-6 8 6v10"/><path d="M10 20v-6h4v6"/></svg></span>
             <strong>ONGs</strong>
             <span data-for="donor">Escolher quem pode receber a doação.</span>
             <span data-for="ong">Conferir os dados da organização.</span>
+            <svg class="shortcut-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
           <a class="shortcut" href="#mensagens" data-view="mensagens">
+            <span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4V6Z"/></svg></span>
             <strong>Mensagens</strong>
             <span>Combinar entrega e tirar dúvidas.</span>
+            <svg class="shortcut-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
           <a class="shortcut" href="#mapa" data-view="mapa">
+            <span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 4-5 2v14l5-2 6 2 5-2V4l-5 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg></span>
             <strong>Mapa</strong>
             <span>Ver organizações por cidade e bairro.</span>
+            <svg class="shortcut-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           </a>
         </div>
       </section>
@@ -86,8 +96,11 @@
           <p data-for="ong">Estes são os dados públicos da rede. O perfil da sua organização está em destaque.</p>
         </header>
         <form class="toolbar" id="busca-ongs">
-          <label class="sr-only" for="filtro-ong">Buscar ONG</label>
-          <input id="filtro-ong" name="q" type="search" placeholder="Nome, cidade ou alimento">
+          <div class="search-bar">
+            <label class="sr-only" for="filtro-ong">Buscar ONG</label>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="filtro-ong" name="q" type="search" placeholder="Nome, cidade ou alimento" autocomplete="off">
+          </div>
         </form>
         <div class="card-list" id="lista-ongs"></div>
       </section>
@@ -153,6 +166,7 @@
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="../../js/main.js" defer></script>
     <script src="../../js/services/api.js" defer></script>
     <script src="../../js/services/ongService.js" defer></script>
     <script src="../../js/ongMap.js" defer></script>
