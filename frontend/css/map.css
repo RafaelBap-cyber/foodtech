@@ -134,3 +134,101 @@
     height: 350px;
   }
 }
+
+/* Filtro por alimento */
+.map-filter {
+  margin: 16px 0 24px;
+}
+
+.map-filter label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #263b2b;
+}
+
+.map-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.map-filter-controls input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 14px;
+  border: 1px solid #d4dfd5;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.map-filter-controls input:focus {
+  border-color: #388e3c;
+  box-shadow: 0 0 0 3px rgba(56, 142, 60, 0.13);
+}
+
+.map-filter-controls button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+#btn-filtrar-alimento {
+  color: #fff;
+  background: #388e3c;
+}
+
+#btn-filtrar-alimento:hover {
+  background: #2e7132;
+  transform: translateY(-1px);
+}
+
+#btn-limpar-filtro {
+  color: #344638;
+  background: #edf2ed;
+}
+
+#btn-limpar-filtro:hover {
+  background: #dfe8df;
+}
+
+.map-filter-controls button:focus-visible {
+  outline: 3px solid #8bc990;
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .map-filter-controls input {
+    flex-basis: 100%;
+  }
+
+  .map-filter-controls button {
+    flex: 1;
+  }
+}
+
+/* Ajuste de largura do filtro por alimento */
+.map-filter-controls input {
+  flex: 0 1 420px;
+  min-width: 180px;
+}
+
+.map-filter-controls {
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .map-filter-controls input {
+    flex-basis: 100%;
+  }
+}
+
+
+
