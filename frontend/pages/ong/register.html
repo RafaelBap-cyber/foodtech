@@ -8,106 +8,138 @@
     <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/auth/auth.css">
   </head>
-  <body class="login-body">
-    <header class="login-top">
-      <a class="logo" href="../../index.html">
-        <img src="../../assets/logo.svg" alt="" width="32" height="32">
-        <span>Food<span class="logo-accent">Tech</span></span>
-      </a>
-      <a class="text-link" href="../cadastro.html">Trocar perfil</a>
-    </header>
+  <body class="auth-body">
+    <div class="auth-shell">
+      <aside class="auth-aside">
+        <div class="auth-aside-inner is-ong">
+          <a class="logo" href="../../index.html">
+            <span class="logo-mark"><img src="../../assets/logo.svg" alt="" width="26" height="26"></span>
+            <span>Food<span class="logo-accent">Tech</span></span>
+          </a>
+          <div class="auth-aside-copy">
+            <h2>Coloque sua ONG no mapa.</h2>
+            <p>Com o endereço e os alimentos que vocês aceitam, doadores da região encontram a organização e enviam só o que faz sentido.</p>
+            <div class="auth-quote">
+              <span class="tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              </span>
+              <p><strong>Visível para quem está perto</strong><span>O endereço posiciona a ONG no mapa público.</span></p>
+            </div>
+          </div>
+        </div>
+      </aside>
 
-    <main class="login-main">
-      <section class="login-card">
-        <p class="choice-kicker">Organização</p>
-        <h1>Criar conta de ONG</h1>
-        <p class="lede">Use esta conta para receber doações e falar com doadores.</p>
+      <main class="auth-main">
+        <div class="auth-top">
+          <a class="logo" href="../../index.html">
+            <span class="logo-mark"><img src="../../assets/logo.svg" alt="" width="26" height="26"></span>
+            <span>Food<span class="logo-accent">Tech</span></span>
+          </a>
+          <a class="auth-back" href="../cadastro.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Trocar perfil
+          </a>
+        </div>
 
-        <form id="register-form" novalidate>
-          <div class="field">
-            <label for="name">Nome da ONG</label>
-            <input id="name" name="name" type="text" autocomplete="organization" placeholder="Nome da organização" required>
-            <p class="field-error" id="name-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="contato@ong.org" required>
-            <p class="field-error" id="email-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="phone">Telefone</label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
-            <p class="field-error" id="phone-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="password">Senha</label>
-            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" required>
-            <p class="field-error" id="password-error" hidden></p>
-          </div>
+        <section class="auth-card is-wide">
+          <p class="eyebrow">Organização</p>
+          <h1>Criar conta de ONG</h1>
+          <p class="lede">Use esta conta para receber doações e falar com doadores.</p>
 
-          <fieldset class="form-group">
-            <legend>Endereço</legend>
-            <p class="field-hint">Usado para mostrar a ONG no mapa.</p>
-            <div class="field-row">
+          <form id="register-form" novalidate>
+            <fieldset class="form-group">
+              <legend>Dados da organização</legend>
               <div class="field">
-                <label for="street">Rua</label>
-                <input id="street" name="street" type="text" autocomplete="address-line1" placeholder="Rua das Flores" required>
-                <p class="field-error" id="street-error" hidden></p>
+                <label for="name">Nome da ONG</label>
+                <input id="name" name="name" type="text" autocomplete="organization" placeholder="Nome da organização" required>
+                <p class="field-error" id="name-error" hidden></p>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="email">E-mail</label>
+                  <input id="email" name="email" type="email" autocomplete="email" placeholder="contato@ong.org" required>
+                  <p class="field-error" id="email-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="phone">Telefone</label>
+                  <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
+                  <p class="field-error" id="phone-error" hidden></p>
+                </div>
               </div>
               <div class="field">
-                <label for="number">Número</label>
-                <input id="number" name="number" type="text" inputmode="numeric" placeholder="100" required>
-                <p class="field-error" id="number-error" hidden></p>
-              </div>
-            </div>
-            <div class="field">
-              <label for="neighborhood">Bairro <span class="opcional">(opcional)</span></label>
-              <input id="neighborhood" name="neighborhood" type="text" placeholder="Centro">
-            </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="city">Cidade</label>
-                <input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Sorocaba" required>
-                <p class="field-error" id="city-error" hidden></p>
+                <label for="password">Senha</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" required>
+                <p class="field-error" id="password-error" hidden></p>
               </div>
               <div class="field">
-                <label for="state">UF</label>
-                <input id="state" name="state" type="text" autocomplete="address-level1" maxlength="2" placeholder="SP" required>
-                <p class="field-error" id="state-error" hidden></p>
+                <label for="description">Descrição da ONG <span class="opcional">(opcional)</span></label>
+                <input id="description" name="description" type="text" placeholder="Como a organização atua">
               </div>
-            </div>
-            <div class="field">
-              <label for="zipCode">CEP <span class="opcional">(opcional)</span></label>
-              <input id="zipCode" name="zipCode" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000">
-            </div>
-          </fieldset>
+            </fieldset>
 
-          <div class="field">
-            <label for="description">Descrição da ONG <span class="opcional">(opcional)</span></label>
-            <input id="description" name="description" type="text" placeholder="Como a organização atua">
+            <fieldset class="form-group">
+              <legend>Endereço</legend>
+              <p class="field-hint">Usado para mostrar a ONG no mapa.</p>
+              <div class="field-row">
+                <div class="field">
+                  <label for="street">Rua</label>
+                  <input id="street" name="street" type="text" autocomplete="address-line1" placeholder="Rua das Flores" required>
+                  <p class="field-error" id="street-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="number">Número</label>
+                  <input id="number" name="number" type="text" inputmode="numeric" placeholder="100" required>
+                  <p class="field-error" id="number-error" hidden></p>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="neighborhood">Bairro <span class="opcional">(opcional)</span></label>
+                  <input id="neighborhood" name="neighborhood" type="text" placeholder="Centro">
+                </div>
+                <div class="field">
+                  <label for="zipCode">CEP <span class="opcional">(opcional)</span></label>
+                  <input id="zipCode" name="zipCode" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="city">Cidade</label>
+                  <input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Sorocaba" required>
+                  <p class="field-error" id="city-error" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="state">UF</label>
+                  <input id="state" name="state" type="text" autocomplete="address-level1" maxlength="2" placeholder="SP" required>
+                  <p class="field-error" id="state-error" hidden></p>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <legend>Alimentos aceitos</legend>
+              <p class="field-hint">Toque para marcar o que a organização recebe.</p>
+              <div class="food-options" id="food-options">
+                <p class="field-hint">Carregando...</p>
+              </div>
+            </fieldset>
+
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Cadastrar</button>
+            <p class="form-status" id="form-status" role="status" hidden></p>
+          </form>
+
+          <div class="auth-footer-links">
+            <p>Já tem conta? <a class="text-link" href="login.html">Entrar</a></p>
           </div>
+        </section>
+      </main>
+    </div>
 
-          <fieldset class="form-group">
-            <legend>Alimentos aceitos</legend>
-            <div class="food-options" id="food-options">
-              <p class="field-hint">Carregando...</p>
-            </div>
-          </fieldset>
-
-          <button class="btn btn-primary btn-block" type="submit">Cadastrar</button>
-          <p class="form-status" id="form-status" role="status" hidden></p>
-        </form>
-
-        <p class="login-switch">
-          Já tem conta?
-          <a href="login.html">Entrar</a>
-        </p>
-      </section>
-    </main>
-
+    <script src="../../js/main.js" defer></script>
     <script src="../../js/session.js" defer></script>
     <script src="../../js/services/api.js" defer></script>
     <script src="../../js/services/authService.js" defer></script>
