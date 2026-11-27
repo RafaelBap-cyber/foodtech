@@ -8,32 +8,75 @@
     <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/styles.css">
   </head>
   <body>
-    <header class="login-top">
-      <a class="logo" href="../../index.html">
-        <img src="../../assets/logo.svg" alt="" width="32" height="32">
-        <span>Food<span class="logo-accent">Tech</span></span>
-      </a>
-      <a class="text-link" href="../../index.html">Voltar ao início</a>
+    <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="site-header">
+      <div class="header-bar">
+        <a class="logo" href="../../index.html">
+          <span class="logo-mark"><img src="../../assets/logo.svg" alt="" width="26" height="26"></span>
+          <span>Food<span class="logo-accent">Tech</span></span>
+        </a>
+
+        <input class="menu-toggle" id="menu-toggle" type="checkbox" aria-label="Abrir menu">
+        <label class="menu-button" for="menu-toggle">
+          <span class="menu-lines" aria-hidden="true"></span>
+          Menu
+        </label>
+
+        <div class="header-panel">
+          <nav class="site-nav" aria-label="Navegação">
+            <a href="../../index.html#como-funciona">Como funciona</a>
+            <a href="list.html" aria-current="page">ONGs</a>
+            <a href="../map/index.html">Mapa</a>
+          </nav>
+          <div class="header-actions">
+            <a class="btn btn-outline btn-small" href="../auth/login.html">Entrar</a>
+            <a class="btn btn-primary btn-small" href="../cadastro.html">Cadastrar</a>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <main class="ong-list-main">
-      <h1>ONGs cadastradas</h1>
-      <p class="lede">Conheça as organizações que recebem doações pelo FoodTech.</p>
+    <main class="page" id="conteudo">
+      <section class="page-hero">
+        <div>
+          <p class="eyebrow">Rede FoodTech</p>
+          <h1>ONGs cadastradas</h1>
+          <p class="lede">Conheça as organizações que recebem doações e veja quais alimentos cada uma aceita.</p>
+        </div>
+        <div class="search-bar">
+          <label class="sr-only" for="filtro-alimento">Filtrar por alimento aceito</label>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="filtro-alimento" type="search" placeholder="Filtrar por alimento: arroz, leite..." autocomplete="off">
+        </div>
+      </section>
 
-      <div class="field" style="max-width: 420px; margin-top: 1.5rem;">
-        <label for="filtro-alimento">Filtrar por alimento aceito</label>
-        <input id="filtro-alimento" type="text" placeholder="ex.: arroz, feijão, leite">
+      <div class="results-bar">
+        <p class="results-count" id="ong-count" aria-live="polite"></p>
+        <a class="link-arrow" href="../map/index.html">
+          Ver no mapa
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
 
-      <p class="form-status" id="status-msg" role="status" hidden></p>
+      <p class="form-status is-error" id="status-msg" role="status" hidden></p>
 
-      <div id="ong-list" class="ong-grid"></div>
+      <div id="ong-list" class="ong-grid" aria-busy="true">
+        <div class="skeleton" aria-hidden="true"></div>
+        <div class="skeleton" aria-hidden="true"></div>
+        <div class="skeleton" aria-hidden="true"></div>
+      </div>
     </main>
 
+    <footer class="site-footer">
+      <p class="footer-bottom">© 2026 FoodTech · Conectando pessoas e alimentos.</p>
+    </footer>
+
+    <script src="../../js/main.js" defer></script>
     <script src="../../js/services/api.js" defer></script>
     <script src="../../js/services/ongService.js" defer></script>
     <script src="../../js/ongList.js" defer></script>

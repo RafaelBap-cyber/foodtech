@@ -1,48 +1,69 @@
 document.addEventListener("DOMContentLoaded", () => {
   const listEl = document.getElementById("ong-list");
   const statusEl = document.getElementById("status-msg");
+  const countEl = document.getElementById("ong-count");
   const filtroInput = document.getElementById("filtro-alimento");
 
-  function mostrarStatus(mensagem) {
+  function mostrarErro(mensagem) {
     statusEl.textContent = mensagem;
     statusEl.hidden = false;
   }
 
-  function renderizarOngs(ongs) {
-    listEl.innerHTML = "";
+  function mostrarCarregando() {
+    listEl.setAttribute("aria-busy", "true");
+    listEl.replaceChildren(
+      ...Array.from({ length: 3 }, () => {
+        const skeleton = document.createElement("div");
+        skeleton.className = "skeleton";
+        skeleton.setAttribute("aria-hidden", "true");
+        return skeleton;
+      })
+    );
+  }
+
+  function atualizarContador(total, alimento) {
+    const rotulo = total === 1 ? "organização encontrada" : "organizações encontradas";
+    countEl.replaceChildren();
+    const numero = document.createElement("strong");
+    numero.textContent = total;
+    countEl.append(numero, ` ${rotulo}`);
+    if (alimento) countEl.append(` para “${alimento}”`);
+  }
+
+  function renderizarOngs(ongs, alimento) {
+    listEl.removeAttribute("aria-busy");
+    statusEl.hidden = true;
+    atualizarContador(ongs.length, alimento);
 
     if (ongs.length === 0) {
-      mostrarStatus("Nenhuma ONG encontrada.");
+      listEl.replaceChildren(
+        FoodTechUI.emptyState(
+          "Nenhuma ONG encontrada",
+          alimento
+            ? "Nenhuma organização aceita esse alimento ainda. Tente outro termo."
+            : "Ainda não há organizações cadastradas."
+        )
+      );
       return;
     }
 
-    statusEl.hidden = true;
-
-    ongs.forEach((ong) => {
-      const card = document.createElement("article");
-      card.className = "ong-card";
-      card.innerHTML = `
-        <h2>${ong.nome}</h2>
-        <p class="ong-card-desc">${ong.descricao || ""}</p>
-        <p class="ong-card-endereco">${ong.endereco || ""}</p>
-        <div class="ong-card-tags">
-          ${(ong.alimentosAceitos || [])
-            .map((item) => `<span class="tag">${item}</span>`)
-            .join("")}
-        </div>
-        <a class="btn btn-secondary" href="profile.html?id=${ong.id}">Ver detalhes</a>
-      `;
-      listEl.appendChild(card);
-    });
+    listEl.replaceChildren(
+      ...ongs.map((ong) =>
+        FoodTechUI.ongCard(ong, { href: `profile.html?id=${encodeURIComponent(ong.id)}` })
+      )
+    );
   }
 
   async function carregarOngs(alimento) {
-    mostrarStatus("Carregando...");
+    mostrarCarregando();
     try {
       const ongs = await FoodTechOngs.list(alimento);
-      renderizarOngs(ongs);
+      renderizarOngs(ongs, alimento);
     } catch (erro) {
-      mostrarStatus("Não foi possível carregar as ONGs.");
+      listEl.removeAttribute("aria-busy");
+      listEl.replaceChildren();
+      countEl.textContent = "";
+      mostrarErro("Não foi possível carregar as ONGs.");
     }
   }
 
